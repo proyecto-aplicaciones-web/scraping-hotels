@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 function AdminPage() {
-	const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+	const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
 
 	const toggleSidebar = () => setIsSidebarOpen(prev => !prev);
 
