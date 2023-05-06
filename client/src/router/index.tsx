@@ -1,4 +1,4 @@
-import { MainPage, SignInPage, SignUpPage } from 'pages';
+import { AdminPage, MainPage, NotFoundPage, SignInPage, SignUpPage } from 'pages';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 const router = createBrowserRouter([
@@ -7,12 +7,20 @@ const router = createBrowserRouter([
 		element: <MainPage />,
 	},
 	{
+		path: "/admin",
+		element: <AdminPage />,
+	},
+	{
 		path: "/signin",
 		element: <SignInPage />,
 	},
 	{
 		path: "/signup",
 		element: <SignUpPage />,
+	},
+	{
+		path: "*",
+		element: <NotFoundPage />,
 	},
 ]);
 

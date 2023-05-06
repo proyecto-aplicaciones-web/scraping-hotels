@@ -4,7 +4,8 @@ module.exports = {
   theme: {
     extend: {
 			colors: {
-				primary: "#536dfe"
+				primary: "#536dfe",
+				secondary: "#3f51b5"
 			},
 			fontFamily: {
 				boogaloo: "'Boogaloo', cursive"

@@ -3,3 +3,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.slick-dots {
+	@apply text-center md:text-end md:pr-12;
+	position: static !important;
+}
+
+@layer base {
+}
+
+@layer components {
+	.overflow-overlay {
+		overflow: auto;
+		overflow: overlay;
+	}
+}
