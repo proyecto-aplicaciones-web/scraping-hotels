@@ -1,16 +1,23 @@
-import { ArticleOutlined, EditNoteOutlined, PersonAddOutlined, PersonOutline } from '@mui/icons-material';
+import { ArticleOutlined, CloseRounded, EditNoteOutlined, MenuRounded, PersonAddOutlined, PersonOutline } from '@mui/icons-material';
 import { Logo } from "components";
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 function AdminPage() {
+	const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+
+	const toggleSidebar = () => setIsSidebarOpen(prev => !prev);
+
 	return (
 		<>
-			<Sidebar />
-			<div className="ml-[14rem] p-2">
+			<Sidebar isOpen={ isSidebarOpen } onClose={ toggleSidebar } />
+			<div className="md:ml-[14rem] p-2">
 				<header>
 					<nav className="flex items-center justify-between">
-						<h1 className="text-xl uppercase italic font-bold text-primary">Dashboard</h1>
+						<div className='flex gap-2'>
+							<button className='block md:hidden' onClick={ toggleSidebar }><MenuRounded className='text-primary' fontSize='medium' /></button>
+							<h1 className="text-xl uppercase italic font-bold text-primary">Dashboard</h1>
+						</div>
 						<button className="text-secondary hover:text-white transition-colors hover:bg-secondary px-2 py-1 rounded-md">Sign out</button>
 					</nav>
 				</header>
@@ -22,12 +29,24 @@ function AdminPage() {
 	);
 }
 
-function Sidebar() {
+interface SidebarProps {
+	isOpen: boolean;
+	onClose: () => void;
+}
+
+function Sidebar({ isOpen, onClose }: SidebarProps) {
 	return (
-		<aside className="fixed top-2 bottom-2 w-[14rem] p-2 rounded-tr-md rounded-br-md shadow-sm shadow-black">
-			<Link to='..'>
-				<Logo />
-			</Link>
+		<aside className="bg-white fixed top-2 bottom-2 w-[14rem] p-2 rounded-tr-md rounded-br-md shadow-sm shadow-black z-50"
+			style={ {
+				left: isOpen ? 0 : "-100%",
+				transition: "left .5s ease",
+			} }>
+			<div className='flex justify-between items-center'>
+				<Link to='..'>
+					<Logo />
+				</Link>
+				<button className='block md:hidden' onClick={ onClose }><CloseRounded className='text-primary' fontSize='medium' /></button>
+			</div>
 			<div className="mt-6 px-2 flex flex-col gap-4">
 				<div>
 					<span className="inline-block pb-1 uppercase text-sm italic font-semibold">Users</span>
