@@ -9,6 +9,18 @@
 	position: static !important;
 }
 
+.or-divider {
+	@apply flex items-center;
+}
+
+.or-divider::before, .or-divider::after {
+	content: "";
+	background-color: #c2c8d0;
+	flex: 1 0 auto;
+	height: .05rem;
+	margin: 0;
+}
+
 @layer base {
 }
 

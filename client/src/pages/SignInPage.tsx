@@ -1,9 +1,13 @@
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Avatar, Box, Button, Container, CssBaseline, Grid, TextField, Typography } from '@mui/material';
-import { Logo } from 'components';
+import { GoogleLogin, Logo } from 'components';
+import { useSignIn } from 'hooks';
 import { Link } from 'react-router-dom';
 
 function SignInPage() {
+
+	const { formik } = useSignIn();
+
 	return (
 		<Container component="main" maxWidth="xs">
 			<CssBaseline />
@@ -21,7 +25,7 @@ function SignInPage() {
 				<Typography component="h1" variant="h5">
 					Sign in
 				</Typography>
-				<Box component="form" onSubmit={ () => { } } noValidate sx={ { mt: 1 } }>
+				<Box component="form" onSubmit={ formik.handleSubmit } noValidate sx={ { mt: 1 } }>
 					<TextField
 						margin="normal"
 						required
@@ -31,6 +35,10 @@ function SignInPage() {
 						name="email"
 						autoComplete="email"
 						autoFocus
+						value={ formik.values.email }
+						onChange={ formik.handleChange }
+						error={ formik.touched.email && Boolean(formik.errors.email) }
+						helperText={ formik.touched.email && formik.errors.email }
 					/>
 					<TextField
 						margin="normal"
@@ -41,6 +49,10 @@ function SignInPage() {
 						type="password"
 						id="password"
 						autoComplete="current-password"
+						value={ formik.values.password }
+						onChange={ formik.handleChange }
+						error={ formik.touched.password && Boolean(formik.errors.password) }
+						helperText={ formik.touched.password && formik.errors.password }
 					/>
 					<Button
 						type="submit"
@@ -50,22 +62,22 @@ function SignInPage() {
 					>
 						Sign In
 					</Button>
-					<Grid container>
-						<Grid item xs>
-							<Link className="text-primary text-sm underline" to=".">
-								Forgot password?
-							</Link>
-						</Grid>
-						<Grid item>
-							<Link className="text-primary text-sm underline" to="/signup">
-								Don't have an account? Sign Up
-							</Link>
-						</Grid>
+					<Grid item xs={ 12 } className="text-sm text-center pb-4">
+						<span>Don't have an account? </span>
+						<Link className="text-primary" to="/signup">
+							Sign Up
+						</Link>
+					</Grid>
+					<Grid item className='or-divider' xs={ 12 }>
+						<span className='text-xs px-2'>OR</span>
+					</Grid>
+					<Grid item xs={ 12 } className='text-center pt-4'>
+						<GoogleLogin />
 					</Grid>
 				</Box>
 			</Box>
-			<Link to='..'>
-				<Logo className='mt-8 justify-center' />
+			<Link to='..' className='flex justify-center my-8'>
+				<Logo />
 			</Link>
 		</Container>
 	);
