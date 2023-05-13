@@ -1,6 +1,6 @@
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Avatar, Box, Button, Container, CssBaseline, Grid, TextField, Typography } from '@mui/material';
-import { Logo } from 'components';
+import { GoogleLogin, Logo } from 'components';
 import { useSignIn } from 'hooks';
 import { Link } from 'react-router-dom';
 
@@ -62,17 +62,17 @@ function SignInPage() {
 					>
 						Sign In
 					</Button>
-					<Grid container>
-						<Grid item xs>
-							<Link className="text-primary text-sm underline" to=".">
-								Forgot password?
-							</Link>
-						</Grid>
-						<Grid item>
-							<Link className="text-primary text-sm underline" to="/signup">
-								Don't have an account? Sign Up
-							</Link>
-						</Grid>
+					<Grid item xs={ 12 } className="text-sm text-center pb-4">
+						<span>Don't have an account? </span>
+						<Link className="text-primary" to="/signup">
+							Sign Up
+						</Link>
+					</Grid>
+					<Grid item className='or-divider' xs={ 12 }>
+						<span className='text-xs px-2'>OR</span>
+					</Grid>
+					<Grid item xs={ 12 } className='text-center pt-4'>
+						<GoogleLogin />
 					</Grid>
 				</Box>
 			</Box>

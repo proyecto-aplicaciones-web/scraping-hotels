@@ -97,12 +97,11 @@ function SignUpPage() {
 					>
 						Sign Up
 					</Button>
-					<Grid container justifyContent="flex-end">
-						<Grid item>
-							<Link className="text-primary text-sm underline" to="/signin">
-								Already have an account? Sign in
-							</Link>
-						</Grid>
+					<Grid item xs={ 12 } className="text-sm text-center">
+						<span>Already have an account? </span>
+						<Link className="text-primary" to="/signin">
+							Sign In
+						</Link>
 					</Grid>
 				</Box>
 			</Box>
