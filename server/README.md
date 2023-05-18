@@ -1,6 +1,5 @@
 ## How to execute the code
 
-Para crear el ambiente virtual descarga la librería "virtualenv" a través de pip:
 To create the virtual environment download the "virtualenv" library via pip.
 
 <br>
@@ -17,14 +16,15 @@ python -m venv venv
 ```
 
 <br>
-To run the virtual environment (from the root folder):
+To run the virtual environment (from the root folder): <br>
+In Windows:<br>
 
 ```
 .\venv\Scripts\activate
 ```
 
 <br>
-Realizar las instalaciones de las dependencias (procure haber ejecutado el ambiente virtual):
+Perform the dependency installations (try to have executed the virtual environment):
 
 ```
 pip install -r requirements.txt
