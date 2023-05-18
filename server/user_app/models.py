@@ -22,6 +22,7 @@ class User(models.Model):
                     password = password, 
                     role = role, 
                     email = email)
+        user.save()
         return user
  
     def delete_user(self):
