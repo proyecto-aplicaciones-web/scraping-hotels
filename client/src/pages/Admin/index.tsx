@@ -1,7 +1,7 @@
 import { ArticleOutlined, CloseRounded, EditNoteOutlined, MenuRounded, PersonAddOutlined, PersonOutline } from '@mui/icons-material';
 import { Logo } from "components";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 
 function AdminPage() {
 	const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
@@ -12,18 +12,16 @@ function AdminPage() {
 		<>
 			<Sidebar isOpen={ isSidebarOpen } onClose={ toggleSidebar } />
 			<div className="md:ml-[14rem] p-2">
-				<header>
+				<header className='mb-4'>
 					<nav className="flex items-center justify-between">
 						<div className='flex gap-2'>
 							<button className='block md:hidden' onClick={ toggleSidebar }><MenuRounded className='text-primary' fontSize='medium' /></button>
-							<h1 className="text-xl uppercase italic font-bold text-primary">Dashboard</h1>
+							<h1 className="text-xl uppercase italic font-bold text-primary">Administrator</h1>
 						</div>
 						<button className="text-secondary hover:text-white transition-colors hover:bg-secondary px-2 py-1 rounded-md">Sign out</button>
 					</nav>
 				</header>
-				<main>
-					The main content
-				</main>
+				<Outlet />
 			</div>
 		</>
 	);
@@ -47,7 +45,10 @@ function Sidebar({ isOpen, onClose }: SidebarProps) {
 				</Link>
 				<button className='block md:hidden' onClick={ onClose }><CloseRounded className='text-primary' fontSize='medium' /></button>
 			</div>
-			<div className="mt-6 px-2 flex flex-col gap-4">
+			<NavLink to='/admin' className="block w-fit mt-4 mb-2 text-primary italic hover:scale-105 font-semibold transition-all rounded-md p-2 uppercase">
+				Dashboard
+			</NavLink>
+			<div className="px-2 flex flex-col gap-4">
 				<div>
 					<span className="inline-block pb-1 uppercase text-sm italic font-semibold">Users</span>
 					<ul className="leading-6">
@@ -92,7 +93,7 @@ interface SidebarLinkProps {
 function SidebarLink({ to, icon, text }: SidebarLinkProps) {
 	return (
 		<li className="hover:text-primary transition-colors w-fit">
-			<Link to={ to } className='flex items-center gap-1'>{ icon }<span>{ text }</span></Link>
+			<Link to={ to } className='link flex items-center gap-1'>{ icon }<span>{ text }</span></Link>
 		</li>
 	);
 }

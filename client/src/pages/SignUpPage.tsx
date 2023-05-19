@@ -1,6 +1,6 @@
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Avatar, Box, Button, Container, CssBaseline, Grid, TextField, Typography } from '@mui/material';
-import { Captcha, Logo } from 'components';
+import { Captcha, GoogleLogin, Logo } from 'components';
 import CONFIG from 'config';
 import { useSignUp } from 'hooks';
 import { Link } from 'react-router-dom';
@@ -13,7 +13,7 @@ function SignUpPage() {
 			<CssBaseline />
 			<Box
 				sx={ {
-					marginTop: 8,
+					marginTop: 2,
 					display: 'flex',
 					flexDirection: 'column',
 					alignItems: 'center',
@@ -97,15 +97,21 @@ function SignUpPage() {
 					>
 						Sign Up
 					</Button>
-					<Grid item xs={ 12 } className="text-sm text-center">
+					<Grid item xs={ 12 } className="text-sm text-center pb-4">
 						<span>Already have an account? </span>
 						<Link className="text-primary" to="/signin">
 							Sign In
 						</Link>
 					</Grid>
+					<Grid item className='or-divider' xs={ 12 }>
+						<span className='text-xs px-2'>OR</span>
+					</Grid>
+					<Grid item xs={ 12 } className='text-center pt-4'>
+						<GoogleLogin />
+					</Grid>
 				</Box>
 			</Box>
-			<Link to='..' className='flex justify-center my-8'>
+			<Link to='..' className='flex justify-center my-6'>
 				<Logo />
 			</Link>
 		</Container>

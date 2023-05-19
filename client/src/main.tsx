@@ -6,11 +6,16 @@ import App from './App';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import './index.css';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 	<React.StrictMode>
 		<ThemeProvider theme={ theme }>
-			<App />
+			<QueryClientProvider client={ queryClient }>
+				<App />
+			</QueryClientProvider>
 		</ThemeProvider>
 	</React.StrictMode>,
 );

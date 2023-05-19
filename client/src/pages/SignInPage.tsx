@@ -1,4 +1,4 @@
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import LockOpenOutlined from '@mui/icons-material/LockOpenOutlined';
 import { Avatar, Box, Button, Container, CssBaseline, Grid, TextField, Typography } from '@mui/material';
 import { GoogleLogin, Logo } from 'components';
 import { useSignIn } from 'hooks';
@@ -13,14 +13,14 @@ function SignInPage() {
 			<CssBaseline />
 			<Box
 				sx={ {
-					marginTop: 8,
+					marginTop: 2,
 					display: 'flex',
 					flexDirection: 'column',
 					alignItems: 'center',
 				} }
 			>
 				<Avatar sx={ { m: 1, bgcolor: 'secondary.main' } }>
-					<LockOutlinedIcon />
+					<LockOpenOutlined />
 				</Avatar>
 				<Typography component="h1" variant="h5">
 					Sign in
