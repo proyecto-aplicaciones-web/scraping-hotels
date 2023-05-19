@@ -105,7 +105,7 @@ def get_user(request, user_id):
                                 'user': {
                                       'first_name': user.first_name,
                                       'last_name': user.last_name, 
-                                      'password': user.password,
+                                      'email': user.email,
                                       'role': user.role,
                                       'state': user.state,
                                 }}, status=200)
@@ -120,7 +120,7 @@ def get_users(request):
     if request.method == 'GET': 
         users = User.get_users()
         return JsonResponse({'status': "OK", 
-                            'users': list(users.values('user_id','first_name','last_name','password','role','state'))
+                            'users': list(users.values('user_id','first_name','last_name','email','role','state'))
                             }, status=200)   
     else:
         return JsonResponse({'status': 'ERROR', 'message': 'HTTP method not allowed'}, status=405)
