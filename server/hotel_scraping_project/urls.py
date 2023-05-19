@@ -26,4 +26,9 @@ urlpatterns = [
     path('get_user/<int:user_id>/', views.get_user, name='get_user'),
     path('delete_user/<int:user_id>/', views.delete_user, name='delete_user'),
     path('modify_user/<int:user_id>/', views.modify_user, name='modify_user'),
+    # News
+    path('create_news/', views.create_news, name='create_news'),
+    path('get_all_news/', views.get_all_news, name='get_all_news'),
+    path('get_news/<int:news_id>/', views.get_news, name='get_news'),
+    path('modify_news/<int:news_id>/', views.modify_news, name='modify_news')
 ]
