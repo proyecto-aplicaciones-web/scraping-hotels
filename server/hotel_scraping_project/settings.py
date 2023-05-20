@@ -12,14 +12,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
-from dotenv import load_dotenv
-
-load_dotenv()
-variable_user = os.getenv('USER')
-variable_password = os.getenv('PASSWORD')
-variable_host = os.getenv('HOST')
-variable_port = os.getenv('PORT')
-variable_name_database = os.getenv('NAME_DATABASE')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -49,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'user_app',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -88,13 +81,13 @@ WSGI_APPLICATION = 'hotel_scraping_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': variable_name_database,
-        'USER': variable_user,
-        'PASSWORD': variable_password,
-        'HOST': variable_host,
-        'PORT': variable_port,
-    }
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'jdzqximm',
+        'USER': 'jdzqximm',
+        'PASSWORD': 'xtT9hdJXqXqicAFtPaAeoyXi4Nre1lbp',
+        'HOST': 'mahmud.db.elephantsql.com',
+        'PORT': '',
+    },
 }
 
 
