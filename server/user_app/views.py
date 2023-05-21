@@ -47,3 +47,16 @@ def modify_user(request, user_id):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@csrf_exempt
+@api_view(['GET','DELETE'])
+def delete_user(request, user_id):
+    user = User.objects.get(pk=user_id)
+    data=request.data
+    serializer = UserSerializer(user, data)
+    if request.method == 'DELETE':
+        data.state = False
+        if data.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
