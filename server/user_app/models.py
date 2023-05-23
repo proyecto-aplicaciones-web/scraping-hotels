@@ -2,7 +2,6 @@ from django.db import models
 
 # Create your models here.
 
-
 class User(models.Model):
     class Meta:
        db_table="User"
@@ -12,11 +11,8 @@ class User(models.Model):
     password = models.CharField(max_length=50)  #! Remember change this field, should be encrypted
     role = models.CharField(max_length=20, default="user")
     state = models.BooleanField(default=True)
-    email = models.EmailField(max_length=200)
-
+    email = models.EmailField(max_length=200, unique=True)
     
-    
-
 class News(models.Model):
     class Meta:
         db_table = "News"

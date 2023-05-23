@@ -1,12 +1,31 @@
 import Slider, { Settings } from "react-slick";
 
+
+const news = [
+	{
+		title: 'new 1',
+		description: "description 1",
+		image: 'https://img.pikbest.com/backgrounds/20210920/booking-luxury-hotel-banner-background-eps_6126596.jpg!w700wp'
+	},
+	{
+		title: 'new 2',
+		description: "description 2",
+		image: 'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/hotel-banner-design-template-1de13b74017249deddd2c4c37c4dd531_screen.jpg?ts=1611053446'
+	},
+	{
+		title: 'new 3',
+		description: "description 3",
+		image: 'https://img.pikbest.com/backgrounds/20210920/booking-luxury-hotel-banner-background-eps_6126596.jpg!w700wp'
+	},
+];
+
 const settings: Settings = {
 	dots: true,
 	infinite: true,
 	speed: 1000,
 	slidesToShow: 1,
 	slidesToScroll: 1,
-	// autoplay: true,
+	autoplay: true,
 	autoplaySpeed: 4000,
 	pauseOnHover: true,
 	arrows: false,
@@ -15,24 +34,23 @@ const settings: Settings = {
 function News() {
 	return (
 		<Slider { ...settings }>
-			{ [1, 2, 3].map(idx => <New key={ idx } index={ idx } />) }
+			{ news.map((item, idx) => <New key={ idx } item={ item } />) }
 		</Slider>
 	);
 }
 
 interface NewProps {
-	index: number;
+	item: any;
 }
 
-function New({ index }: NewProps) {
+function New({ item }: NewProps) {
 	return (
 		<section>
-			<div className="flex flex-col md:items-stretch md:flex-row gap-4 md:h-72 mx-2 md:mx-12">
-				<img className="md:flex-1 rounded-lg bg-primary object-cover md:max-w-none md:mx-0 h-56 md:h-auto" src="https://images.unsplash.com/photo-1506765515384-028b60a970df?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2069&q=80" alt="image1" />
-				<div className="max-w-prose text-center hover:overflow-overlay mx-auto md:mx-0">
-					<h2 className="text-xl italic font-semibold">Latest offers { index }</h2>
-					<p className="">Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum laborum repudiandae, dolores delectus repellendus dolor modi omnis reiciendis distinctio non.</p>
-					<p className="">Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum laborum repudiandae, dolores delectus repellendus dolor modi omnis reiciendis distinctio non.</p>
+			<div className="flex flex-col lg:items-stretch lg:flex-row gap-4 lg:h-72 mx-2 lg:mx-12">
+				<img className="lg:flex-1 rounded-lg bg-primary object-cover lg:mx-0 h-56 lg:h-auto" src={ item.image } alt="image1" />
+				<div className="text-center hover:overflow-overlay mx-auto lg:mx-0">
+					<h2 className="text-xl italic font-semibold">{ item.title }</h2>
+					<p className="max-w-prose">Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis, natus, debitis reprehenderit officia tempore nulla voluptatem accusantium rerum culpa consequuntur ipsum perferendis soluta in ipsa. Consequuntur sunt id nihil est.</p>
 				</div>
 			</div>
 		</section>

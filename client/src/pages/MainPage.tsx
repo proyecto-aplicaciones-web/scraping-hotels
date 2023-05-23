@@ -12,7 +12,7 @@ function MainPage() {
 
 	return (
 		<main className="">
-			<nav className="flex items-center justify-between py-2 mx-2 mb-2 sm:mb-6 md:mx-12">
+			<nav className="flex items-center justify-between py-2 mx-2 mb-2 sm:mb-4 md:mx-12">
 				<div className='h-10 sm:h-12 flex gap-2 items-center font-boogaloo text-xl md:text-2xl'>
 					<img className="h-full" src="/logo.svg" alt='scraping hotels logo' />
 					<span className="hidden sm:block">Scraping Hotels</span>
