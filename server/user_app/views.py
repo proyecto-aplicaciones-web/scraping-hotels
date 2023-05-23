@@ -33,40 +33,51 @@ from .serializers import *
 @csrf_exempt
 @api_view(['GET'])
 def get_users(request):
-    users = User.objects.all()
-    serializer = UserSerializer(users, many = True)
-    if request.method == 'GET':   
-        return Response(serializer.data)
+    try:
+        users = User.objects.all().filter(state=True)
+        serializer = UserSerializer(users, many = True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    except BaseException:
+        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @csrf_exempt
 @api_view(['POST'])
 def create_user(request):
-    if request.method == 'POST':
+    try:
         serializer = UserSerializer(data = request.data)
-        if serializer.is_valid():
-            serializer.save()    
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        serializer.save()    
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    except BaseException:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
    
 @csrf_exempt
 @api_view(['GET'])
 def get_user(request, user_id):
-    user = User.objects.get(pk=user_id)
-    if request.method == 'GET':
-        serializer = UserSerializer(user)
-        return Response(serializer.data)
-    
+    try:    
+        user = User.objects.get(pk=user_id)
+        user_status = user.state
+        if user_status == True:
+            serializer = UserSerializer(user)
+            return Response(serializer.data)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    except BaseException:
+        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
 @csrf_exempt
 @api_view(['PUT'])
 def modify_user(request, user_id):
-    user = User.objects.get(pk=user_id)
-    if request.method == 'PUT':
+    try:    
+        user = User.objects.get(pk=user_id)
         serializer = UserSerializer(user, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+    except BaseException:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 #CRUDS NEWS
@@ -144,14 +155,14 @@ class NewsDelete(generics.GenericAPIView):
             return Response(status=status.HTTP_200_OK, data={"Delete"})
         return Response(status=status.HTTP_204_NO_CONTENT)
 @csrf_exempt
-@api_view(['GET','DELETE'])
+@api_view(['DELETE'])
 def delete_user(request, user_id):
-    user = User.objects.get(pk=user_id)
-    data=request.data
-    serializer = UserSerializer(user, data)
-    if request.method == 'DELETE':
-        data.state = False
-        if data.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
-    return Response(status=status.HTTP_400_BAD_REQUEST)
+    try:
+        user = User.objects.get(pk=user_id)
+        user.state= False
+        user.save()
+        return Response(status=status.HTTP_200_OK)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    except BaseException:
+        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
