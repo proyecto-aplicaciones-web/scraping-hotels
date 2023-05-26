@@ -1,5 +1,5 @@
-import { AdminLayout, Dashboard, MainPage, NotFoundPage, SignInPage, SignUpPage, UserList } from 'pages';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { AdminLayout, CreateNew, CreateUser, Dashboard, MainPage, NewsList, NotFoundPage, SignInPage, SignUpPage, UserList } from 'pages';
+import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 const router = createBrowserRouter([
 	{
@@ -16,7 +16,31 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "users",
-				element: <UserList />
+				element: <Outlet />,
+				children: [
+					{
+						index: true,
+						element: <UserList />,
+					},
+					{
+						path: "create",
+						element: <CreateUser />
+					}
+				]
+			},
+			{
+				path: "news",
+				element: <Outlet />,
+				children: [
+					{
+						index: true,
+						element: <NewsList />,
+					},
+					{
+						path: "create",
+						element: <CreateNew />
+					}
+				]
 			}
 		]
 	},

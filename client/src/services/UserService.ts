@@ -3,18 +3,18 @@ import { User } from "types";
 
 export function getUserList(): Promise<User[]> {
 	return axios
-	.get('/get_users/')
+	.get('/users/')
 	.then(res => res.data);
 }
 
 export function updateUser(id: number): Promise<any> {
 	return axios
-	.put(`/modify_user/${id}/`)
+	.put(`/users/modify/${id}/`)
 	.then(res => console.log(res.data));
 }
 
 export function toggleUserStatus(id: number): Promise<any> {
 	return axios
-	.delete(`/delete_user/${id}/`)
+	.delete(`users/delete/${id}/`)
 	.then(res => console.log(res.data));
 }

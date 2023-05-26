@@ -28,13 +28,13 @@ function UserList() {
 		setConfirmModalInfo(null);
 	};
 
-	if (isLoading) return 'Loading...';
+	if (isLoading) return <span>Loading...</span>;
 
 	return (
 		<>
 			<TableContainer component={ Paper } className="hover:overflow-auto" sx={ { overflow: "hidden" } }>
 				<Table sx={ { minWidth: 650 } } aria-label="simple table">
-					<TableHead sx={ { backgroundColor: "#ddd" } }>
+					<TableHead sx={ { backgroundColor: "#eee" } }>
 						<TableRow>
 							<TableCell align="center">ID</TableCell>
 							<TableCell align="center">First Name</TableCell>
