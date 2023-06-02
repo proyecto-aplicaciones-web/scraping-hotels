@@ -1,19 +1,25 @@
 import axios from "config/axios";
 import { User } from "types";
 
-export function getUserList(): Promise<User[]> {
+export function getAll(): Promise<User[]> {
 	return axios
 	.get('/users/')
 	.then(res => res.data);
 }
 
-export function updateUser(id: number): Promise<any> {
+export function create(data: Partial<User>): Promise<User> {
 	return axios
-	.put(`/users/modify/${id}/`)
-	.then(res => console.log(res.data));
+	.post('/users/create/', data)
+	.then(res => res.data);
 }
 
-export function toggleUserStatus(id: number): Promise<any> {
+export function update(id: number, data: Partial<User>): Promise<User> {
+	return axios
+	.patch(`/users/modify/${id}/`, data)
+	.then(res => res.data);
+}
+
+export function toggleStatus(id: number): Promise<any> {
 	return axios
 	.delete(`users/delete/${id}/`)
 	.then(res => console.log(res.data));

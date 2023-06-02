@@ -1,40 +1,29 @@
+import { useQuery } from "@tanstack/react-query";
+import { QUERY_KEYS } from "config/tanstackQuery";
 import Slider, { Settings } from "react-slick";
-
-
-const news = [
-	{
-		title: 'new 1',
-		description: "description 1",
-		image: 'https://img.pikbest.com/backgrounds/20210920/booking-luxury-hotel-banner-background-eps_6126596.jpg!w700wp'
-	},
-	{
-		title: 'new 2',
-		description: "description 2",
-		image: 'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/hotel-banner-design-template-1de13b74017249deddd2c4c37c4dd531_screen.jpg?ts=1611053446'
-	},
-	{
-		title: 'new 3',
-		description: "description 3",
-		image: 'https://img.pikbest.com/backgrounds/20210920/booking-luxury-hotel-banner-background-eps_6126596.jpg!w700wp'
-	},
-];
+import { NewService } from "services";
 
 const settings: Settings = {
 	dots: true,
 	infinite: true,
-	speed: 1000,
+	speed: 500,
 	slidesToShow: 1,
 	slidesToScroll: 1,
 	autoplay: true,
-	autoplaySpeed: 4000,
+	autoplaySpeed: 10000,
 	pauseOnHover: true,
 	arrows: false,
 };
 
 function News() {
+	const { data: news, isLoading } = useQuery({
+		queryKey: [QUERY_KEYS.LATEST_NEWS],
+		queryFn: () => NewService.getNewsList({ limit: 5 })
+	});
+
 	return (
 		<Slider { ...settings }>
-			{ news.map((item, idx) => <New key={ idx } item={ item } />) }
+			{ news?.map((item, idx) => <New key={ idx } item={ item } />) }
 		</Slider>
 	);
 }
@@ -46,11 +35,11 @@ interface NewProps {
 function New({ item }: NewProps) {
 	return (
 		<section>
-			<div className="flex flex-col lg:items-stretch lg:flex-row gap-4 lg:h-72 mx-2 lg:mx-12">
-				<img className="lg:flex-1 rounded-lg bg-primary object-cover lg:mx-0 h-56 lg:h-auto" src={ item.image } alt="image1" />
-				<div className="text-center hover:overflow-overlay mx-auto lg:mx-0">
+			<div className="flex flex-col lg:items-stretch lg:justify-center lg:max-w-[80vw] lg:gap-12 lg:flex-row gap-4 lg:h-72 mx-4 lg:mx-auto lg:max-h-[30vh]">
+				<img className="rounded-lg object-contain lg:mx-0 h-56 lg:h-auto" src={ item.image } alt="image1" />
+				<div className="text-center hover:overflow-overlay mx-auto space-y-4 lg:mx-0">
 					<h2 className="text-xl italic font-semibold">{ item.title }</h2>
-					<p className="max-w-prose">Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis, natus, debitis reprehenderit officia tempore nulla voluptatem accusantium rerum culpa consequuntur ipsum perferendis soluta in ipsa. Consequuntur sunt id nihil est.</p>
+					<p className="max-w-prose mx-auto">{ item.description }</p>
 				</div>
 			</div>
 		</section>

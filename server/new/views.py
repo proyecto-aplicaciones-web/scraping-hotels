@@ -10,8 +10,12 @@ from .serializers import *
 @csrf_exempt
 @api_view(['GET'])
 def get_news(request):
+    limit = request.GET.get('limit', None)
+    print('limit', limit)
     try:
-        news = New.objects.all()
+        news = New.objects.all().order_by('-updatedAt')
+        if limit is not None:
+            news = news[:int(limit)]
         serializer = NewSerializer(news, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     except New.DoesNotExist:

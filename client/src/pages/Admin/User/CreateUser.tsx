@@ -1,10 +1,28 @@
 import { Box, Button, Container, Grid, TextField } from '@mui/material';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Captcha } from 'components';
+import { notifyCreating } from 'components/toast';
 import CONFIG from 'config';
+import { QUERY_KEYS } from 'config/tanstackQuery';
 import { useSignUp } from 'hooks';
+import { UserService } from 'services';
+import { User } from 'types';
 
 function CreateUser() {
-	const { formik, setCaptchaToken } = useSignUp();
+	const queryClient = useQueryClient();
+
+	const { isLoading, mutate } = useMutation({
+		mutationFn: (data: Partial<User>) => notifyCreating(UserService.create(data)),
+		onSuccess: () => {
+			queryClient.invalidateQueries([QUERY_KEYS.USER_LIST]);
+			setCaptchaToken(null);
+			formik.resetForm();
+		}
+	});
+
+	const { formik, setCaptchaToken } = useSignUp({
+		onSubmit: (user: Partial<User>) => mutate(user)
+	});
 
 	return (
 		<Container component="div" maxWidth="md">
@@ -84,6 +102,7 @@ function CreateUser() {
 						type="submit"
 						fullWidth
 						variant="contained"
+						disabled={ isLoading }
 						sx={ { mt: 3, mb: 2 } }
 					>
 						Create
