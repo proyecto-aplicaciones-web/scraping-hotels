@@ -1,12 +1,27 @@
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Avatar, Box, Button, Container, CssBaseline, Grid, TextField, Typography } from '@mui/material';
+import { useMutation } from '@tanstack/react-query';
 import { Captcha, GoogleLogin, Logo } from 'components';
+import { notifyCreating } from 'components/toast';
 import CONFIG from 'config';
 import { useSignUp } from 'hooks';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { UserService } from 'services';
+import { User } from 'types';
 
 function SignUpPage() {
-	const { formik, setCaptchaToken } = useSignUp();
+	const navigate = useNavigate();
+
+	const { formik, setCaptchaToken } = useSignUp({
+		onSubmit: (user) => mutate(user)
+	});
+
+	const { isLoading, mutate } = useMutation({
+		mutationFn: (data: Partial<User>) => notifyCreating(UserService.create(data)),
+		onSuccess: () => {
+			navigate('/signin');
+		}
+	});
 
 	return (
 		<Container component="main" maxWidth="xs">
@@ -93,6 +108,7 @@ function SignUpPage() {
 						type="submit"
 						fullWidth
 						variant="contained"
+						disabled={ isLoading }
 						sx={ { mt: 3, mb: 2 } }
 					>
 						Sign Up

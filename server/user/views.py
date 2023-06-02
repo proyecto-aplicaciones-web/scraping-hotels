@@ -79,13 +79,15 @@ def login(request):
     password = request.data.get('password')
     user = User.objects.get(email=email)
     is_password_correct = check_password(password, user.password)
-    if not user.state:
-        return Response({'error': 'User inactive'}, status=401)
     if user is not None and is_password_correct:
         access_token = AccessToken.for_user(user)
         token = str(access_token)
-        return Response({'token': token})
+        user.password = ''
+        serializer = UserSerializer(user)
+        return Response({**serializer.data, 'token': token}, status.HTTP_200_OK)
     else:
+        if not user.state:
+            return Response({'error': 'User inactive'}, status=401)
         # Invalid credentials
         return Response({'error': 'Invalid credentials'}, status=401)
     

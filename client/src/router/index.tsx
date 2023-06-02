@@ -1,3 +1,4 @@
+import { AdminGuard } from 'guards';
 import { AdminLayout, CreateNew, CreateUser, Dashboard, MainPage, NewsList, NotFoundPage, SignInPage, SignUpPage, UserList } from 'pages';
 import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
 
@@ -8,7 +9,7 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/admin",
-		element: <AdminLayout />,
+		element: <AdminGuard><AdminLayout /></AdminGuard>,
 		children: [
 			{
 				index: true,

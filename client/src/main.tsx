@@ -8,13 +8,16 @@ import "slick-carousel/slick/slick.css";
 import { theme } from 'utils/theme';
 import App from './App';
 import './index.css';
+import { AuthProvider } from 'context/AuthContext';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 	<React.StrictMode>
-		<ThemeProvider theme={ theme }>
-			<QueryClientProvider client={ queryClient }>
-				<App />
-			</QueryClientProvider>
-		</ThemeProvider>
+		<AuthProvider>
+			<ThemeProvider theme={ theme }>
+				<QueryClientProvider client={ queryClient }>
+					<App />
+				</QueryClientProvider>
+			</ThemeProvider>
+		</AuthProvider>
 	</React.StrictMode>,
 );

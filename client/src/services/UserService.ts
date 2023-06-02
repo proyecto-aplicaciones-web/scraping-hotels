@@ -1,5 +1,5 @@
 import axios from "config/axios";
-import { User } from "types";
+import { Auth, User } from "types";
 
 export function getAll(): Promise<User[]> {
 	return axios
@@ -23,4 +23,10 @@ export function toggleStatus(id: number): Promise<any> {
 	return axios
 	.delete(`users/delete/${id}/`)
 	.then(res => console.log(res.data));
+}
+
+export function login(data: Pick<User, 'email' | 'password'>): Promise<Auth> {
+	return axios
+	.post('users/login/', data)
+	.then(res => res.data);
 }
