@@ -1,12 +1,17 @@
 import { useFormik } from "formik";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 import { User } from "types";
 import * as Yup from 'yup';
 
-function useSignUp() {
+interface UseSignUpProps {
+	onSubmit: (user: Partial<User>) => void;
+}
+
+function useSignUp({onSubmit}: UseSignUpProps) {
 	const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 	
-	const formik = useFormik<Partial<User> & {password:string}>({
+	const formik = useFormik<Partial<User>>({
 		initialValues: {
 			first_name: '',
 			last_name: '',
@@ -19,12 +24,12 @@ function useSignUp() {
 			email: Yup.string().email('Invalid email address').required('Required'),
 			password: Yup.string().min(6, "Minimum lenght: 6 characters").required('Required'),
 		}),
-		onSubmit: values => {
+		onSubmit: data => {
 			if(captchaToken === null) {
-				alert('Are you a robot? try again');
-				return
+				toast.error('Are you a robot?');
+				return;
 			}
-			alert(JSON.stringify(values,null,2))
+			onSubmit(data);
 		},
 	});
 
