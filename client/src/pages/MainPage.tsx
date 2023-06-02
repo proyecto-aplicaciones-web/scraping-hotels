@@ -1,5 +1,5 @@
 import { LoginOutlined, SearchSharp } from "@mui/icons-material";
-import { News } from "components";
+import { GoogleMap, News } from "components";
 import { Link } from "react-router-dom";
 
 function MainPage() {
@@ -30,6 +30,7 @@ function MainPage() {
 				<h2 className="text-lg italic text-center sm:text-start text-primary font-semibold">Accommodation says a lot about your trip</h2>
 				<Link className="inline-block text-primary underline" to="/admin">Admin</Link>
 				{/* <HotelList/> */ }
+				<GoogleMap />
 			</section>
 		</main>
 	);
