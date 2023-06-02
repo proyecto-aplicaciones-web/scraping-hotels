@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from datetime import timedelta
 from pathlib import Path
+from .env import ENV_VARIABLES
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -154,11 +155,11 @@ DATABASES = {
     # },
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'jdzqximm',
-        'USER': 'jdzqximm',
-        'PASSWORD': 'xtT9hdJXqXqicAFtPaAeoyXi4Nre1lbp',
-        'HOST': 'mahmud.db.elephantsql.com',
-        'PORT': '',
+        'NAME': ENV_VARIABLES['DATABASE_NAME'],
+        'USER': ENV_VARIABLES['DATABASE_USER'],
+        'PASSWORD': ENV_VARIABLES['DATABASE_PASSWORD'],
+        'HOST': ENV_VARIABLES['DATABASE_HOST'],
+        'PORT': ENV_VARIABLES['DATABASE_PORT'],
     },
 }
 

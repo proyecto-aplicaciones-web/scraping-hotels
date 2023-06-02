@@ -1,11 +1,11 @@
-from django.views.decorators.csrf import csrf_exempt 
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework.response import Response
 from rest_framework import status
+from django.contrib.auth.hashers import make_password, check_password
 from .models import *
 from .serializers import *
-from django.contrib.auth.hashers import make_password, check_password
 
 # Create your views here.
 @csrf_exempt
@@ -13,18 +13,21 @@ from django.contrib.auth.hashers import make_password, check_password
 def get_users(request):
     try:
         users = User.objects.all().order_by('id')
+        for user in users:
+            user.password = ''
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     except User.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     except BaseException:
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
+
 @csrf_exempt
 @api_view(['GET'])
 def get_user(request, user_id):
     try:    
         user = User.objects.get(pk=user_id)
+        user.password = ''
         serializer = UserSerializer(user)
         return Response(serializer.data)
     except User.DoesNotExist:
