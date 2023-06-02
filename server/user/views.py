@@ -1,10 +1,11 @@
 from django.views.decorators.csrf import csrf_exempt 
 from rest_framework.decorators import api_view
+from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework.response import Response
 from rest_framework import status
 from .models import *
 from .serializers import *
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
 
 # Create your views here.
 @csrf_exempt
@@ -67,3 +68,21 @@ def delete_user(request, user_id):
         return Response(status=status.HTTP_404_NOT_FOUND)
     except BaseException:
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@csrf_exempt
+@api_view(['POST'])
+def login(request):
+    email = request.data.get('email')
+    password = request.data.get('password')
+    user = User.objects.get(email=email)
+    is_password_correct = check_password(password, user.password)
+    if not user.state:
+        return Response({'error': 'User inactive'}, status=401)
+    if user is not None and is_password_correct:
+        access_token = AccessToken.for_user(user)
+        token = str(access_token)
+        return Response({'token': token})
+    else:
+        # Invalid credentials
+        return Response({'error': 'Invalid credentials'}, status=401)
+    
