@@ -33,7 +33,7 @@ def get_hotel_room(request, room_id):
 @csrf_exempt
 @api_view(['POST'])
 def create_hotel_room(request):
-    serializer = HotelRoomSerializer(data=request.data)
+    serializer = HotelRoomCreateSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)

@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { UserService } from 'services';
 import { User } from 'types';
 import EditUser from './EditUser';
+import { Link } from 'react-router-dom';
 
 function UserList() {
 	const queryClient = useQueryClient();
@@ -46,6 +47,7 @@ function UserList() {
 							<TableCell align="center">Email</TableCell>
 							<TableCell align="center">Role</TableCell>
 							<TableCell align="center">Status</TableCell>
+							<TableCell align="center">Visited hotels</TableCell>
 							<TableCell align="center">Actions</TableCell>
 						</TableRow>
 					</TableHead>
@@ -66,6 +68,9 @@ function UserList() {
 								<TableCell align="center">{ user.email }</TableCell>
 								<TableCell align="center">{ user.role }</TableCell>
 								<TableCell align="center">{ user.state ? <CheckRounded className='text-teal-700' /> : <CloseRounded className='text-red-700' /> }</TableCell>
+								<TableCell align="center">
+									<Link to={ `./${user.id}/visited_hotels` } className='block text-primary underline'>Visited Hotels</Link>
+								</TableCell>
 								<TableCell align="center">
 									<div className="flex items-center justify-around gap-2">
 										<button onClick={ () => onEdit(user) }><EditRounded className='text-primary' /></button>

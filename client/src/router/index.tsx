@@ -1,5 +1,5 @@
 import { AdminGuard } from 'guards';
-import { AdminLayout, CreateNew, CreateUser, Dashboard, MainPage, NewsList, NotFoundPage, SignInPage, SignUpPage, UserList } from 'pages';
+import { AdminLayout, CreateNew, CreateUser, Dashboard, MainPage, NewsList, NotFoundPage, SignInPage, SignUpPage, UserList, VisitedHotels } from 'pages';
 import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 const router = createBrowserRouter([
@@ -26,6 +26,20 @@ const router = createBrowserRouter([
 					{
 						path: "create",
 						element: <CreateUser />
+					},
+					{
+						path: ":userId",
+						element: <Outlet />,
+						children: [
+							{
+								index: true,
+								element: <NotFoundPage />
+							},
+							{
+								path: 'visited_hotels',
+								element: <VisitedHotels />
+							}
+						]
 					}
 				]
 			},

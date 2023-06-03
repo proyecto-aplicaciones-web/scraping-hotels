@@ -1,7 +1,9 @@
+import Ranking from "./Ranking";
+
 function Dashboard() {
 	return (
 		<main>
-			The main content
+			<Ranking />
 		</main>
 	);
 }

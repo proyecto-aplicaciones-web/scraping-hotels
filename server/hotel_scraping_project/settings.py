@@ -51,7 +51,7 @@ LOCAL_APPS = [
     'hotel_room',
     'hotel_room_service',
     'hotel_room_image',
-    
+    'user_query'
 ]
 
 THIRD_PARTY_APPS = [
