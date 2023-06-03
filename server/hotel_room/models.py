@@ -10,3 +10,4 @@ class HotelRoom(models.Model):
     geolocation = models.TextField()
     link = models.URLField()
     discount = models.BooleanField()
+    

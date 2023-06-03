@@ -28,4 +28,5 @@ urlpatterns = [
     path('hotel_room/', include('hotel_room.urls')),
     path('hotel_room_service/', include('hotel_room_service.urls')),
     path('hotel_room_image/', include('hotel_room_image.urls')),
+    path('user_query/', include('user_query.urls')),
 ]

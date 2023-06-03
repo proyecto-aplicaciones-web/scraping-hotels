@@ -11,7 +11,6 @@ from .serializers import *
 @api_view(['GET'])
 def get_news(request):
     limit = request.GET.get('limit', None)
-    print('limit', limit)
     try:
         news = New.objects.all().order_by('-updatedAt')
         if limit is not None:
