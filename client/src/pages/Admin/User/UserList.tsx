@@ -69,7 +69,7 @@ function UserList() {
 								<TableCell align="center">{ user.role }</TableCell>
 								<TableCell align="center">{ user.state ? <CheckRounded className='text-teal-700' /> : <CloseRounded className='text-red-700' /> }</TableCell>
 								<TableCell align="center">
-									<Link to={ `./${user.id}/visited_hotels` } className='block text-primary underline'>Visited Hotels</Link>
+									<Link to={ `./${user.id}/visited_rooms` } className='block text-primary underline'>Visited Hotels</Link>
 								</TableCell>
 								<TableCell align="center">
 									<div className="flex items-center justify-around gap-2">

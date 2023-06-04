@@ -1,11 +1,32 @@
-import { AdminGuard } from 'guards';
-import { AdminLayout, CreateNew, CreateUser, Dashboard, MainPage, NewsList, NotFoundPage, SignInPage, SignUpPage, UserList, VisitedHotels } from 'pages';
+import { MainLayout } from 'components';
+import { AdminGuard, AuthGuard } from 'guards';
+import { AdminLayout, CreateNew, CreateUser, Dashboard, MainPage, NewsList, NotFoundPage, RoomDetails, SignInPage, SignUpPage, UserList, VisitedHotels } from 'pages';
 import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 const router = createBrowserRouter([
 	{
 		path: "/",
-		element: <MainPage />,
+		element: <MainLayout />,
+		children: [
+			{
+				index: true,
+				element: <MainPage />,
+			}
+		]
+	},
+	{
+		path: "/rooms",
+		element: <AuthGuard><Outlet /></AuthGuard>,
+		children: [
+			{
+				index: true,
+				element: <NotFoundPage />
+			},
+			{
+				path: ":roomId",
+				element: <RoomDetails />
+			}
+		]
 	},
 	{
 		path: "/admin",
@@ -36,7 +57,7 @@ const router = createBrowserRouter([
 								element: <NotFoundPage />
 							},
 							{
-								path: 'visited_hotels',
+								path: 'visited_rooms',
 								element: <VisitedHotels />
 							}
 						]

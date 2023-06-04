@@ -17,7 +17,7 @@ interface Room {
 	score: number;
 	geolocation: string;
 	link: string;
-	discount: string;
+	discount: boolean;
 	images: RoomImage[];
 	services: RoomService[];
 }

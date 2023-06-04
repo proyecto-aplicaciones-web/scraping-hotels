@@ -1,7 +1,8 @@
 import { AdminPanelSettings, ArticleOutlined, CloseRounded, EditNoteOutlined, MenuRounded, PersonAddOutlined, PersonOutline } from '@mui/icons-material';
 import { Logo } from "components";
+import { useAuth } from 'context/AuthContext';
 import React, { useState } from "react";
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 
 function AdminPage() {
 	const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
@@ -32,6 +33,14 @@ interface SidebarProps {
 }
 
 function Sidebar({ isOpen, onClose }: SidebarProps) {
+	const { logout } = useAuth();
+	const navigate = useNavigate();
+
+	const onLogout = () => {
+		logout();
+		navigate('/');
+	};
+
 	return (
 		<aside className="bg-white fixed top-2 bottom-2 w-[14rem] p-2 rounded-tr-md rounded-br-md shadow-sm shadow-black z-50"
 			style={ {
@@ -82,7 +91,7 @@ function Sidebar({ isOpen, onClose }: SidebarProps) {
 						</ul>
 					</div>
 				</div>
-				<button className="flex justify-center items-center gap-2 text-secondary hover:text-white transition-colors hover:bg-secondary px-2 py-2 rounded-md">
+				<button className="flex justify-center items-center gap-2 text-secondary hover:text-white transition-colors hover:bg-secondary px-2 py-2 rounded-md" onClick={ onLogout }>
 					<AdminPanelSettings />
 					<span>Sign out</span>
 				</button>

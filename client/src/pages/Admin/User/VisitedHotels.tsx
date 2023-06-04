@@ -6,14 +6,17 @@ import { UserQueryService } from "services";
 
 function VisitedHotels() {
 	const { userId } = useParams();
-	const { data: rooms } = useQuery({
+	const { data: rooms, isLoading } = useQuery({
 		queryKey: [QUERY_KEYS.VISITED_ROOMS, userId],
 		queryFn: () => UserQueryService.getVisitedRoomsByUserId(parseInt(userId!))
 	});
+
+	if (isLoading) return <span>Loading...</span>;
+
 	return (
 		<div className="max-w-6xl mx-auto space-y-4">
 			{ rooms?.map(room => (
-				<Room room={ room } />
+				<Room key={ room.id } room={ room } />
 			)) }
 		</div>
 	);
