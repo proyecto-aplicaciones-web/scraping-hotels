@@ -1,26 +1,25 @@
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import LockOpenOutlined from '@mui/icons-material/LockOpenOutlined';
 import { Avatar, Box, Button, Container, CssBaseline, Grid, TextField, Typography } from '@mui/material';
 import { GoogleLogin, Logo } from 'components';
 import { useSignIn } from 'hooks';
 import { Link } from 'react-router-dom';
 
 function SignInPage() {
-
-	const { formik } = useSignIn();
+	const { formik, mutation: { isLoading } } = useSignIn();
 
 	return (
 		<Container component="main" maxWidth="xs">
 			<CssBaseline />
 			<Box
 				sx={ {
-					marginTop: 8,
+					marginTop: 2,
 					display: 'flex',
 					flexDirection: 'column',
 					alignItems: 'center',
 				} }
 			>
 				<Avatar sx={ { m: 1, bgcolor: 'secondary.main' } }>
-					<LockOutlinedIcon />
+					<LockOpenOutlined />
 				</Avatar>
 				<Typography component="h1" variant="h5">
 					Sign in
@@ -48,7 +47,7 @@ function SignInPage() {
 						label="Password"
 						type="password"
 						id="password"
-						autoComplete="current-password"
+						autoComplete="new-password"
 						value={ formik.values.password }
 						onChange={ formik.handleChange }
 						error={ formik.touched.password && Boolean(formik.errors.password) }
@@ -58,6 +57,7 @@ function SignInPage() {
 						type="submit"
 						fullWidth
 						variant="contained"
+						disabled={ isLoading }
 						sx={ { mt: 3, mb: 2 } }
 					>
 						Sign In
