@@ -1,7 +1,7 @@
 import { ArrowBackRounded, OpenInNewOutlined, ScatterPlotRounded } from "@mui/icons-material";
 import { Rating } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { GoogleMap } from "components";
+import { GoogleMap, Loader } from "components";
 import { QUERY_KEYS } from "config/tanstackQuery";
 import { useNavigate, useParams } from "react-router-dom";
 import Slider, { Settings } from "react-slick";
@@ -29,15 +29,20 @@ function RoomDetails() {
 
 	const goBack = () => navigate(-1);
 
-	if (isLoading || !room) return <span>Loading...</span>;
+	if (isLoading || !room) return (
+		<div className="w-screen h-screen flex items-center justify-center">
+			<Loader text="Loading room details" />
+		</div>
+	);
 
 	return (
 		<main className="mx-2 md:mx-12 mt-2 mb-4">
-			<button className="text-primary" onClick={ goBack }>
+			<button className="text-primary flex items-center gap-1" onClick={ goBack }>
 				<ArrowBackRounded />
+				<span>Back</span>
 			</button>
 			<div className="space-y-8 mt-2">
-				<div className="flex flex-col lg:grid lg:grid-cols-3 gap-12 lg:gap-4 items-center">
+				<div className="flex flex-col lg:grid lg:grid-cols-3 gap-12 lg:gap-4 ">
 					{ room.images.length > 1 ? (
 						<Slider { ...settings } className="mx-auto lg:mx-0 max-w-full sm:max-w-lg lg:max-w-fit col-span-1">
 							{ room.images.map(image => (
@@ -51,12 +56,14 @@ function RoomDetails() {
 							<img src={ room.images[0].image } alt={ `${room.name} image` } />
 						</picture>
 					) }
-					<div className="col-span-2 space-y-4">
-						<div className="flex justify-between items-center gap-4">
-							<h4 className="text-2xl text-primary italic font-semibold tracking-wider">{ room.name }</h4>
-							{ !room.discount && <span className="bg-emerald-500 rounded-full px-4 py-1 shadow-sm shadow-black/40 text-white font-bold">OFFER!</span> }
+					<div className="col-span-2 flex flex-col justify-around">
+						<div className="space-y-4">
+							<div className="flex justify-between items-center gap-4">
+								<h4 className="text-2xl text-primary italic font-semibold tracking-wider">{ room.name }</h4>
+								{ !room.discount && <span className="bg-emerald-500 rounded-full px-4 py-1 shadow-sm shadow-black/40 text-white font-bold">OFFER!</span> }
+							</div>
+							<p className="text-justify">{ room.description }</p>
 						</div>
-						<p className="text-justify">{ room.description }</p>
 						<div className="flex justify-between items-end">
 							<div>
 								<h6 className="text-lg tracking-wide text-secondary mb-2 font-semibold">Services</h6>
@@ -83,7 +90,9 @@ function RoomDetails() {
 						</div>
 					</div>
 				</div>
-				<GoogleMap />
+				<div className="max-w-4xl mx-auto pt-12">
+					<GoogleMap />
+				</div>
 			</div>
 		</main>
 	);

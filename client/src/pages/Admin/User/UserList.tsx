@@ -1,7 +1,7 @@
 import { CheckRounded, CloseRounded, DeleteRounded, EditRounded } from '@mui/icons-material';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ConfirmAction, Modal } from 'components';
+import { ConfirmAction, Loader, Modal } from 'components';
 import { notifyDeleting } from 'components/toast';
 import { QUERY_KEYS } from 'config/tanstackQuery';
 import { useState } from 'react';
@@ -33,7 +33,11 @@ function UserList() {
 
 	const onDelete = async (id: number) => removeMutation(id);
 
-	if (isLoading) return <span>Loading...</span>;
+	if (isLoading) return (
+		<div className="w-full h-[calc(100vh-5rem)] md:h-[calc(100vh-1rem)] flex items-center justify-center">
+			<Loader text="Loading users" />
+		</div>
+	);
 
 	return (
 		<>

@@ -1,7 +1,9 @@
+import { Skeleton } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "config/tanstackQuery";
 import Slider, { Settings } from "react-slick";
 import { NewService } from "services";
+import Loader from "./Loader";
 
 const settings: Settings = {
 	dots: true,
@@ -23,7 +25,11 @@ function News() {
 
 	return (
 		<Slider { ...settings }>
-			{ news?.map((item, idx) => <New key={ idx } item={ item } />) }
+			{ isLoading ? (
+				<div className="lg:h-72 mx-4 lg:mx-auto lg:max-h-[30vh] text-center">
+					<Loader text="Loading latest news" />
+				</div>
+			) : news?.map((item, idx) => <New key={ idx } item={ item } />) }
 		</Slider>
 	);
 }
