@@ -11,13 +11,13 @@ import App from './App';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-	<React.StrictMode>
-		<AuthProvider>
-			<ThemeProvider theme={ theme }>
-				<QueryClientProvider client={ queryClient }>
-					<App />
-				</QueryClientProvider>
-			</ThemeProvider>
-		</AuthProvider>
-	</React.StrictMode>
+	// <React.StrictMode>
+	<AuthProvider>
+		<ThemeProvider theme={ theme }>
+			<QueryClientProvider client={ queryClient }>
+				<App />
+			</QueryClientProvider>
+		</ThemeProvider>
+	</AuthProvider>
+	// </React.StrictMode>
 );

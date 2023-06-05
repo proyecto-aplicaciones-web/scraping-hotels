@@ -22,7 +22,7 @@ def get_all_user_query(request):
 @api_view(['GET'])
 def get_most_visited_rooms(request):
     try:
-        top_hotel_rooms = UserQuery.objects.values('hotel_room_id').annotate(count=Count('hotel_room_id')).order_by('-count')[:3]
+        top_hotel_rooms = UserQuery.objects.values('hotel_room_id').annotate(count=Count('hotel_room_id')).order_by('-count')[:5]
         hotel_room_ids = [item['hotel_room_id'] for item in top_hotel_rooms]
         room_count_dict = {item['hotel_room_id']: item['count'] for item in top_hotel_rooms}
         hotel_rooms = HotelRoom.objects.filter(id__in=hotel_room_ids)
@@ -51,6 +51,11 @@ def get_visited_rooms_by_user_id(request, user_id):
 @csrf_exempt
 @api_view(['POST'])
 def create_user_query(request):
+    user_id = request.data.get('user_id')
+    hotel_room_id = request.data.get('hotel_room_id')
+    userQuery = UserQuery.objects.filter(user_id=user_id, hotel_room_id=hotel_room_id)
+    if userQuery.exists():
+        return Response(status=status.HTTP_202_ACCEPTED)
     serializer = UserQuerySerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()

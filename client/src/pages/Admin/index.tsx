@@ -62,15 +62,15 @@ function Sidebar({ isOpen, onClose }: SidebarProps) {
 						<div>
 							<span className="inline-block pb-1 uppercase text-sm italic font-semibold">Users</span>
 							<ul className="leading-6">
-								<SidebarLink to='./users' icon={ <PersonOutline fontSize="inherit" /> } text="Users List" />
-								<SidebarLink to='./users/create' icon={ <PersonAddOutlined fontSize="inherit" /> } text="Create an user" />
+								<SidebarLink to='./users' icon={ <PersonOutline fontSize="inherit" /> } text="Users" />
+								<SidebarLink to='./users/create' icon={ <PersonAddOutlined fontSize="inherit" /> } text="Create users" />
 							</ul>
 						</div>
 						<hr />
 						<div>
 							<span className="inline-block pb-1 uppercase text-sm italic font-semibold">News</span>
 							<ul className="leading-6">
-								<SidebarLink to='./news' icon={ <ArticleOutlined fontSize="inherit" /> } text="News List" />
+								<SidebarLink to='./news' icon={ <ArticleOutlined fontSize="inherit" /> } text="News" />
 								<SidebarLink to='./news/create' icon={ <EditNoteOutlined fontSize="inherit" /> } text="Create news" />
 							</ul>
 						</div>
