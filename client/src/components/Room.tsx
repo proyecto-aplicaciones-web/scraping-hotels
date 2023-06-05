@@ -17,8 +17,8 @@ function Room({ room }: RoomProps) {
 				) }
 				<div className="flex flex-col gap-1 sm:gap-2 truncate">
 					<h5 className="text-primary text-lg italic font-semibold truncate">{ room.name }</h5>
-					<p className="max-h-24 truncate">{ room.description } Lorem ipsum dolor sit, amet consectetur adipisicing elit. Velit aliquid inventore temporibus quod fuga non delectus facilis. Ex eos fuga ipsam vitae corporis incidunt omnis dicta consectetur! Repellat laborum, a sint atque eum praesentium quo quae accusantium nam, sapiente, unde vero neque at reprehenderit eius modi sed debitis quidem mollitia!</p>
-					<Rating name="half-rating-read" defaultValue={ room.score / 2 } precision={ 0.5 } readOnly />
+					<p className="truncate">{ room.description }</p>
+					<Rating name="half-rating" defaultValue={ room.score / 2 } precision={ 0.5 } readOnly />
 					<span>$ { room.price }</span>
 				</div>
 			</div>
