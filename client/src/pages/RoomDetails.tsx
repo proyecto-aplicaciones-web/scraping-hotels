@@ -1,11 +1,13 @@
 import { ArrowBackRounded, OpenInNewOutlined, ScatterPlotRounded } from "@mui/icons-material";
 import { Rating } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { GoogleMap, Loader } from "components";
 import { QUERY_KEYS } from "config/tanstackQuery";
+import { useAuth } from "context/AuthContext";
+import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Slider, { Settings } from "react-slick";
-import { RoomService } from "services";
+import { RoomService, UserQueryService } from "services";
 
 const settings: Settings = {
 	dots: true,
@@ -21,11 +23,25 @@ const settings: Settings = {
 
 function RoomDetails() {
 	const { roomId } = useParams();
+	const { auth } = useAuth();
 	const navigate = useNavigate();
+
 	const { data: room, isLoading } = useQuery({
 		queryKey: [QUERY_KEYS.ROOM, roomId],
 		queryFn: () => RoomService.getRoomById(parseInt(roomId!))
 	});
+
+	const { mutate: incrementVisits } = useMutation({
+		mutationFn: () => UserQueryService.incrementVisits({
+			userId: auth?.id!,
+			roomId: parseInt(roomId!)
+		})
+	});
+
+	useEffect(() => {
+		if (auth?.role === 'admin') return;
+		incrementVisits();
+	}, []);
 
 	const goBack = () => navigate(-1);
 
@@ -34,6 +50,7 @@ function RoomDetails() {
 			<Loader text="Loading room details" />
 		</div>
 	);
+
 
 	return (
 		<main className="mx-2 md:mx-12 mt-2 mb-4">
