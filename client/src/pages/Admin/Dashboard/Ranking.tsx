@@ -29,7 +29,7 @@ function Ranking() {
 								) : (
 									<img className="w-24 object-contain rounded-md" src="https://media.istockphoto.com/id/1128826884/vector/no-image-vector-symbol-missing-available-icon-no-gallery-for-this-moment.jpg?s=170667a&w=0&k=20&c=O9Y41QO7idN44o-VK5s7dBUqg-dhJZcyagMb8485BNU=" alt="no image" />
 								) }
-								<div className="flex items-center gap-8">
+								<div className="flex-1 flex items-center justify-between gap-8">
 									<div className="flex flex-col justify-center items-start max-w-[12rem] truncate">
 										<h5 className="ml-1 truncate">{ room.name }</h5>
 										<Rating name="half-rating-read" defaultValue={ room.score / 2 } precision={ 0.5 } readOnly />
