@@ -13,23 +13,23 @@ function Ranking() {
 	});
 
 	return (
-		<div className="w-fit text-center rounded-md shadow-md shadow-black/40">
+		<div className="w-full text-center rounded-md shadow-md shadow-black/40">
 			<h4 className='text-primary text-lg italic font-semibold my-2'>Most visited hotel rooms</h4>
 			{ isLoading ? (
 				<div className="h-24 flex items-center justify-center">
 					<Loader />
 				</div>
 			) : (
-				<ul className="flex flex-col place-items-stretch gap-2 p-2 divide-y">
+				<ul className="flex flex-col place-items-stretch gap-2 divide-y">
 					{ ranking?.map(room => (
 						<Link key={ room.id } className="block" to={ `/rooms/${room.id}` }>
-							<li className="flex items-center gap-4">
+							<li className="flex items-center gap-4 py-2 sm:py-0 hover:bg-primary/10 px-2">
 								{ room.images.length ? (
-									<img className="w-24 object-contain rounded-md my-2 shadow-sm shadow-black/70" src={ room.images[0]?.image } alt={ `room image ${room.images[0]?.id}` } />
+									<img className="hidden sm:block w-24 object-contain rounded-md my-2 shadow-sm shadow-black/70" src={ room.images[0]?.image } alt={ `room image ${room.images[0]?.id}` } />
 								) : (
-									<img className="w-24 object-contain rounded-md" src="https://media.istockphoto.com/id/1128826884/vector/no-image-vector-symbol-missing-available-icon-no-gallery-for-this-moment.jpg?s=170667a&w=0&k=20&c=O9Y41QO7idN44o-VK5s7dBUqg-dhJZcyagMb8485BNU=" alt="no image" />
+									<img className="hidden sm:block w-24 object-contain rounded-md" src="https://media.istockphoto.com/id/1128826884/vector/no-image-vector-symbol-missing-available-icon-no-gallery-for-this-moment.jpg?s=170667a&w=0&k=20&c=O9Y41QO7idN44o-VK5s7dBUqg-dhJZcyagMb8485BNU=" alt="no image" />
 								) }
-								<div className="flex items-center gap-8">
+								<div className="flex-1 flex items-center justify-between gap-8">
 									<div className="flex flex-col justify-center items-start max-w-[12rem] truncate">
 										<h5 className="ml-1 truncate">{ room.name }</h5>
 										<Rating name="half-rating-read" defaultValue={ room.score / 2 } precision={ 0.5 } readOnly />
