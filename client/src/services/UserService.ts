@@ -30,3 +30,11 @@ export function login(data: Pick<User, 'email' | 'password'>): Promise<Auth> {
 	.post('users/login/', data)
 	.then(res => res.data);
 }
+
+export async function googleAuth(data: Partial<User>) {
+	try {
+		await create(data);
+	} catch(error: any) {
+		console.log('user already exists');
+	}
+}

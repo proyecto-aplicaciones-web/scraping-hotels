@@ -1,9 +1,15 @@
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view
+from rest_framework.permissions import AllowAny
+from social_django.utils import psa
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.hashers import make_password, check_password
+from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
+# from rest_auth.registration.views import SocialLoginView
 from .models import *
 from .serializers import *
 
@@ -90,4 +96,42 @@ def login(request):
             return Response({'error': 'User inactive'}, status=401)
         # Invalid credentials
         return Response({'error': 'Invalid credentials'}, status=401)
-    
+
+# class GoogleLogin(SocialLoginView):
+#     adapter_class = GoogleOAuth2Adapter 
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+@psa()
+def register_by_access_token(request, backend):
+    token = request.data.get('access_token')
+    user = request.backend.do_auth(token)
+    print(request)
+    if user:
+        token, _ = Token.objects.get_or_create(user=user)
+        return Response(
+            {
+                'token': token.key
+            },
+            status=status.HTTP_200_OK,
+            )
+    else:
+        return Response(
+            {
+                'errors': {
+                    'token': 'Invalid token'
+                    }
+            },
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+
+@api_view(['GET', 'POST'])
+def authentication_test(request):
+    print(request.user)
+    return Response(
+        {
+            'message': "User successfully authenticated"
+        },
+        status=status.HTTP_200_OK,
+    )
