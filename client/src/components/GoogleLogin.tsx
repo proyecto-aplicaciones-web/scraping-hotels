@@ -1,38 +1,41 @@
 import CONFIG from 'config';
-import axios from 'config/axios';
-import GL, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
+import { useSignIn } from 'hooks';
+import jwt_decode from "jwt-decode";
+import { useEffect } from 'react';
+import { UserService } from 'services';
+import { User } from 'types';
 
 function GoogleLogin() {
-	const handleGoogleLoginSuccess = (response: GoogleLoginResponse | GoogleLoginResponseOffline) => {
-		if ('accessToken' in response && response?.accessToken) {
-			// Envía el token de acceso a tu API de Django Rest Framework para la autenticación
-			// Puedes utilizar axios u otra biblioteca para realizar la solicitud HTTP
-			axios.post('/api/auth/google/', { access_token: response.accessToken })
-				.then((response) => {
-					console.log(response);
+	const { mutation } = useSignIn();
 
-				})
-				.catch((error) => {
-					console.log(error);
-				});
-		} else {
-			// Maneja la respuesta fallida del inicio de sesión de Google
-		}
+	const handleCallbackResponse = async (response: any) => {
+		const decoded = jwt_decode(response.credential) as any;
+		const user: Partial<User> = {
+			email: decoded.email,
+			first_name: decoded.given_name,
+			last_name: decoded.family_name,
+			password: CONFIG.SECRET_PASSWORD
+		};
+		await UserService.googleAuth(user);
+		mutation.mutate({ email: user.email!, password: user.password! });
 	};
 
-	const handleGoogleLoginFailure = (error: unknown) => {
-		console.log('failure', { error });
+	useEffect(() => {
+		//@ts-ignore
+		google.accounts.id.initialize({
+			client_id: CONFIG.GOOGLE_AUTH_CLIENT_ID,
+			callback: handleCallbackResponse
+		});
 
-	};
+		//@ts-ignore
+		google.accounts.id.renderButton(
+			document.getElementById('signInDiv'),
+			{ theme: 'outline', size: 'large' }
+		);
+	}, []);
 
 	return (
-		<GL
-			clientId={ CONFIG.GOOGLE_AUTH_CLIENT_ID }
-			buttonText="Login with Google"
-			onSuccess={ handleGoogleLoginSuccess }
-			onFailure={ handleGoogleLoginFailure }
-			cookiePolicy="single_host_origin"
-		/>
+		<div id="signInDiv" className='w-fit mx-auto'></div>
 	);
 };
 
