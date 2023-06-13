@@ -7,12 +7,12 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print('Inicializando scraping...')
-        # settings = get_project_settings()
-        # # settings.set('LOG_ENABLED', False ,priority='cmdline')
-        # process = CrawlerProcess(settings)
+        settings = get_project_settings()
+        # settings.set('LOG_ENABLED', False ,priority='cmdline')
+        process = CrawlerProcess(settings)
 
-        # # process.crawl('BookingSpider')
-        # # process.crawl('KayakSpider')
-        # # process.crawl('SkyscannerSpider')
-        # process.crawl('TripadvisorSpider')
-        # process.start() 
+        # process.crawl('BookingSpider')
+        # process.crawl('KayakSpider')
+        # process.crawl('SkyscannerSpider')
+        process.crawl('TripadvisorSpider')
+        process.start() 

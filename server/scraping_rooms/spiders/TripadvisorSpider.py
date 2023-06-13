@@ -8,14 +8,14 @@ from scraping_rooms.items import HotelRoomItem
  
 class TripadvisorSpider(CrawlSpider):
     name = "TripadvisorSpider"
-    allowed_domains = ['tripadvisor.co/']
+    allowed_domains = ['tripadvisor.co']
     start_urls = ["https://www.tripadvisor.co/Hotels-g294073-Colombia-Hotels.html"]
      
     download_delay = 0.5 #!
     
     custom_settings = {
         'USER_AGENT': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
-        'CLOSESPIDER_PAGECOUNT': 8, #!
+        # 'CLOSESPIDER_PAGECOUNT': 8, #!
         'CLOSESPIDER_ITEMCOUNT': 8, #!
         'DOWNLOAD_DELAY': 0.5,
     }
@@ -49,12 +49,14 @@ class TripadvisorSpider(CrawlSpider):
         item = ItemLoader(HotelRoomItem(), sel)
         item.add_xpath('name','//*[@id="HEADING"]//text()')
         item.add_value('description', "Descripción pendiente")
-        item.add_xpath('price', '//div[@data-sizegroup="hr_chevron_prices"]//text()', MapCompose(self.clean_prices)) #! TODO: Change later to select the lower price
-        item.add_xpath('score','//*[@id="ABOUT_TAB"]/div[2]/div[1]/div[1]/span//text()')
+        # item.add_xpath('price', '//div[@data-sizegroup="hr_chevron_prices"]//text()', MapCompose(self.clean_prices)) #! TODO: Change later to select the lower price
+        item.add_value('price', [555])
+        # item.add_xpath('score','//*[@id="ABOUT_TAB"]/div[2]/div[1]/div[1]/span//text()')
+        item.add_value('price', [5.4])
         item.add_xpath('geolocation','//*[@id="component_3"]/div/div/div[2]/div/div[2]/div/div/div/span[2]//text()')
         # item.add_xpath('link','//h1[@class="ui-pdp-title"]//text()')
         # item.add_xpath('discount','//h1[@class="ui-pdp-title"]//text()')
-        item.add_value('link', "link pendiente")
-        item.add_value('discount', False)
+        item.add_value('link', ["link pendiente"])
+        item.add_value('discount', [False])
         yield item.load_item()
         

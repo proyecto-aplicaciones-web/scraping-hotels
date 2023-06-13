@@ -12,20 +12,23 @@ from hotel_room.models import HotelRoom
 
 
 class ScrapingRoomsPipeline:
-    def process_item(self, item, spider):
+    async def process_item(self, item, spider):
+        await self.save_item(item, spider)
         return item
     
+    @sync_to_async
     def save_item(self, item, spider):
         try:
             hotel_room_data = {}
             hotel_room_data['name'] = item.get('name', ['Without name'])[0]
             hotel_room_data['description'] = item.get('description', ['Without description'])[0]
-            hotel_room_data['price'] = item.get('price', ['Without price'])[0]
-            hotel_room_data['score'] = item.get('score', ['Without score'])[0]
+            hotel_room_data['price'] = item.get('price', [0])[0]
+            hotel_room_data['score'] = item.get('score', [0])[0]
             hotel_room_data['geolocation'] = item.get('geolocation', ['Without geolocation'])[0]
             hotel_room_data['link'] = item.get('link', ['Without link'])[0]
-            
+            print('OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO')
             if hotel_room_data['name'] != 'Without name':
+                print(hotel_room_data)
                 HotelRoom.objects.create(
                     name = hotel_room_data['name'],
                     description = hotel_room_data['description'],
