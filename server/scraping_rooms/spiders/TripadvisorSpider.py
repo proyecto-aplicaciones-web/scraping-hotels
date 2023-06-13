@@ -39,17 +39,14 @@ class TripadvisorSpider(CrawlSpider):
            return float(new_price)
        else:
            return -1.0
+       
+    def clean_score(self, price:str):
+       new_price = price.replace(',','.').replace(' ','').strip()
+       if new_price:
+           return float(new_price)
+       else:
+           return -1.0
    
-    def clean_prices(self, prices: list[str]):
-        cleaned_prices = []
-        for price in prices:
-            new_price = price.replace('$','').replace('.','').replace(' ','')
-            new_price = new_price.strip()
-            print(">>>>>>>>>>>>",new_price.strip(), "<<<<<<<<" )
-            if new_price:
-                cleaned_prices.append(float(new_price))  
-        return cleaned_prices
-    
     def parser_hotel_room(self, response):
         sel = Selector(response)
         item = ItemLoader(HotelRoomItem(), sel)
@@ -57,7 +54,7 @@ class TripadvisorSpider(CrawlSpider):
         # item.add_value('description', "Descripción pendiente")
         # item.add_value('price', [555])
         item.add_xpath('price', '//div[@data-sizegroup="hr_chevron_prices"]/text()', MapCompose(self.clean_price)) #! TODO: Change later to select the lower price
-        # item.add_xpath('score','//*[@id="ABOUT_TAB"]/div[2]/div[1]/div[1]/span//text()') 
+        item.add_xpath('score','//div[@class="ui_column  "]/div/span//text()', MapCompose(self.clean_score)) 
         item.add_xpath('geolocation','//*[@id="component_3"]/div/div/div[2]/div/div[2]/div/div/div/span[2]//text()')
         # item.add_xpath('link','//h1[@class="ui-pdp-title"]//text()')
         # item.add_xpath('discount','//h1[@class="ui-pdp-title"]//text()')
