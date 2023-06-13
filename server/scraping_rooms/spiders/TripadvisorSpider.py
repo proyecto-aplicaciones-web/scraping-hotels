@@ -16,8 +16,8 @@ class TripadvisorSpider(CrawlSpider):
     custom_settings = {
         'USER_AGENT': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
         # 'CLOSESPIDER_PAGECOUNT': 8, #!
-        'CLOSESPIDER_ITEMCOUNT': 8, #!
-        'DOWNLOAD_DELAY': 0.5,
+        'CLOSESPIDER_ITEMCOUNT': 2, #!
+        'DOWNLOAD_DELAY': 1,
     }
     
     rules = (
@@ -34,29 +34,35 @@ class TripadvisorSpider(CrawlSpider):
     )
     
     def clean_price(self, price:str):
-       new_price = price.replace('$','').replace('.','').replace(' ','')
-       return float(new_price.strip())
+       new_price = price.replace('$','').replace('.','').replace(' ','').strip()
+       if new_price:
+           return float(new_price)
+       else:
+           return -1.0
    
     def clean_prices(self, prices: list[str]):
         cleaned_prices = []
         for price in prices:
             new_price = price.replace('$','').replace('.','').replace(' ','')
-            cleaned_prices.append(float(new_price.strip()))
+            new_price = new_price.strip()
+            print(">>>>>>>>>>>>",new_price.strip(), "<<<<<<<<" )
+            if new_price:
+                cleaned_prices.append(float(new_price))  
         return cleaned_prices
     
     def parser_hotel_room(self, response):
         sel = Selector(response)
         item = ItemLoader(HotelRoomItem(), sel)
         item.add_xpath('name','//*[@id="HEADING"]//text()')
-        item.add_value('description', "Descripción pendiente")
-        # item.add_xpath('price', '//div[@data-sizegroup="hr_chevron_prices"]//text()', MapCompose(self.clean_prices)) #! TODO: Change later to select the lower price
-        item.add_value('price', [555])
-        # item.add_xpath('score','//*[@id="ABOUT_TAB"]/div[2]/div[1]/div[1]/span//text()')
-        item.add_value('price', [5.4])
+        # item.add_value('description', "Descripción pendiente")
+        # item.add_value('price', [555])
+        item.add_xpath('price', '//div[@data-sizegroup="hr_chevron_prices"]/text()', MapCompose(self.clean_price)) #! TODO: Change later to select the lower price
+        # item.add_xpath('score','//*[@id="ABOUT_TAB"]/div[2]/div[1]/div[1]/span//text()') 
         item.add_xpath('geolocation','//*[@id="component_3"]/div/div/div[2]/div/div[2]/div/div/div/span[2]//text()')
         # item.add_xpath('link','//h1[@class="ui-pdp-title"]//text()')
         # item.add_xpath('discount','//h1[@class="ui-pdp-title"]//text()')
-        item.add_value('link', ["link pendiente"])
+        # item.add_value('link', ["link pendiente"])
+        item.add_value('link', [response.url])
         item.add_value('discount', [False])
         yield item.load_item()
         
