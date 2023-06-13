@@ -26,6 +26,7 @@ class ScrapingRoomsPipeline:
             hotel_room_data['score'] = item.get('score', [0])[0]
             hotel_room_data['geolocation'] = item.get('geolocation', ['Without geolocation'])[0]
             hotel_room_data['link'] = item.get('link', ['Without link'])[0]
+            hotel_room_data['discount'] = item.get('discount', [False])[0]
             print('OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO')
             if hotel_room_data['name'] != 'Without name':
                 print(hotel_room_data)
@@ -36,6 +37,7 @@ class ScrapingRoomsPipeline:
                     score = hotel_room_data['score'],
                     geolocation = hotel_room_data['geolocation'],
                     link = hotel_room_data['link'],
+                    discount = hotel_room_data['discount'],
                 )    
             
         except Exception as e:
