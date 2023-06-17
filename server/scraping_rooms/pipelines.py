@@ -22,7 +22,7 @@ class ScrapingRoomsPipeline:
             hotel_room_data = {}
             hotel_room_data['name'] = item.get('name', ['Without name'])[0]
             hotel_room_data['description'] = item.get('description', ['Without description'])[0]
-            hotel_room_data['price'] = item.get('price', [-1])[0]
+            hotel_room_data['price'] = item.get('price', [-1])
             hotel_room_data['score'] = item.get('score', [-1])[0]
             hotel_room_data['geolocation'] = item.get('geolocation', ['Without geolocation'])[0]
             hotel_room_data['link'] = item.get('link', ['Without link'])[0]
@@ -33,7 +33,7 @@ class ScrapingRoomsPipeline:
                 HotelRoom.objects.create(
                     name = hotel_room_data['name'],
                     description = hotel_room_data['description'],
-                    price = hotel_room_data['price'],
+                    price = min(hotel_room_data['price']),
                     score = hotel_room_data['score'],
                     geolocation = hotel_room_data['geolocation'],
                     link = hotel_room_data['link'],

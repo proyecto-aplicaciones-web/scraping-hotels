@@ -54,6 +54,8 @@ class TripadvisorSpider(CrawlSpider):
         # item.add_value('description', "Descripción pendiente")
         # item.add_value('price', [555])
         item.add_xpath('price', '//div[@data-sizegroup="hr_chevron_prices"]/text()', MapCompose(self.clean_price)) #! TODO: Change later to select the lower price
+        item.add_xpath('price', '//div[@data-automation="tab-bar-offer-price"]/div[1]//text()', MapCompose(self.clean_price)) 
+        item.add_xpath('price', '//div[@class="premium_offers_area offers"]/div[2]/a/div[1]/div[2]//text()', MapCompose(self.clean_price)) 
         item.add_xpath('score','//div[@class="ui_column  "]/div/span//text()', MapCompose(self.clean_score)) 
         item.add_xpath('geolocation','//*[@id="component_3"]/div/div/div[2]/div/div[2]/div/div/div/span[2]//text()')
         # item.add_xpath('link','//h1[@class="ui-pdp-title"]//text()')
