@@ -13,7 +13,7 @@ class TripadvisorSpider(CrawlSpider):
     
     def start_requests(self):
         for url in self.start_urls:
-            yield SplashRequest(url, self.parse, args={'wait': 0.5})
+            yield SplashRequest(url, self.parser_hotel_room, args={'wait': 0.5})
      
     download_delay = 1 #!
     

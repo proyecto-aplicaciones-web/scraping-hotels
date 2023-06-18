@@ -4,15 +4,31 @@ To create the virtual environment download the "virtualenv" library via pip.
 
 <br>
 
+Windows:
+
 ```
 pip install virtualenv 
 ```
 
+Linux:
+
+```
+pip3 install virtualenv 
+```
+
 <br> 
 Create the virtual environment with named "venv"
+<br>
+Windows:
 
 ```
 python -m venv venv
+```
+
+Linux:
+
+```
+python3 -m venv venv
 ```
 
 <br>
@@ -23,19 +39,42 @@ In Windows:<br>
 .\venv\Scripts\activate
 ```
 
+In Linux:
+
+```
+source venv\bin\activate
+```
+
 <br>
 Perform the dependency installations (try to have executed the virtual environment):
+
+Windows:
 
 ```
 pip install -r requirements.txt
 ```
 
+Linux:
+
+```
+pip3 install -r requirements.txt
+```
+
 <br>
 Perform the dependency installations (try to have run the virtual environment):
+
+Windows:
 
 ```
 python manage.py makemigrations
 python manage.py migrate
+```
+
+Linux:
+
+```
+python3 manage.py makemigrations
+python3 manage.py migrate
 ```
 
 <br>
