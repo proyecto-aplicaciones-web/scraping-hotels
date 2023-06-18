@@ -63,5 +63,7 @@ class TripadvisorSpider(CrawlSpider):
         # item.add_value('link', ["link pendiente"])
         item.add_value('link', [response.url]) 
         item.add_xpath('discount', '//div[@data-component="@ta/hotels.hotel-review-atf-special-offer"]/div/div//text()')
+        
+        item.add_xpath('services', '//div[@data-test-target="hr-about-group-property"]/following-sibling::div[1]/div/text()')
         yield item.load_item()
         

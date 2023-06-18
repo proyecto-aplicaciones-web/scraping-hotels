@@ -9,6 +9,7 @@ from itemadapter import ItemAdapter
 import traceback
 from asgiref.sync import sync_to_async
 from hotel_room.models import HotelRoom
+from hotel_room_service.models import HotelRoomService
 from typing import List
 
 class ScrapingRoomsPipeline:
@@ -35,6 +36,8 @@ class ScrapingRoomsPipeline:
             hotel_room_data['link'] = item.get('link', ['Without link'])[0]
             hotel_room_data['discount'] = item.get('discount', ['False'])[0]
             
+            hotel_room_data['services'] = item.get('services', ['Without additional services'])
+            
             if hotel_room_data['name'] != 'Without name':
                 print(hotel_room_data)
                 if hotel_room_data['discount'] != 'False':
@@ -42,7 +45,7 @@ class ScrapingRoomsPipeline:
                 else:
                     hotel_room_data['discount'] = False
                     
-                HotelRoom.objects.create(
+                hotel_room = HotelRoom.objects.create(
                     name = hotel_room_data['name'],
                     description = self.bind_description(hotel_room_data['description']), 
                     price = min(hotel_room_data['price']),
@@ -50,7 +53,10 @@ class ScrapingRoomsPipeline:
                     geolocation = hotel_room_data['geolocation'],
                     link = hotel_room_data['link'],
                     discount = hotel_room_data['discount'],
-                )    
+                )   
+                
+                for service in hotel_room_data['services']:
+                     HotelRoomService.objects.create(hotel_room_id=hotel_room, service=service)
             
         except Exception as e:
             print('Error strange detected:', e)

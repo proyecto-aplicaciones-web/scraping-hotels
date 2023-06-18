@@ -14,3 +14,10 @@ class HotelRoomItem(Item):
     geolocation = Field()
     link = Field()
     discount = Field()
+    
+    # To model with service
+    services = Field()
+    
+    # To model with images
+    # image = Field() 
+    
