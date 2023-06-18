@@ -25,7 +25,7 @@ ROBOTSTXT_OBEY = False #! More freedom to scrapy
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 0.5 #! 0.5 seconds per search
+DOWNLOAD_DELAY = 1 #! 1 second per search
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -42,17 +42,23 @@ DOWNLOAD_DELAY = 0.5 #! 0.5 seconds per search
 #    "Accept-Language": "en",
 #}
 
+DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
+
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-#SPIDER_MIDDLEWARES = {
-#    "scraping_rooms.middlewares.ScrapingRoomsSpiderMiddleware": 543,
-#}
+SPIDER_MIDDLEWARES = {
+   # "scraping_rooms.middlewares.ScrapingRoomsSpiderMiddleware": 543, #!
+   'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    "scraping_rooms.middlewares.ScrapingRoomsDownloaderMiddleware": 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+   # "scraping_rooms.middlewares.ScrapingRoomsDownloaderMiddleware": 543, #!
+   'scrapy_splash.SplashCookiesMiddleware': 723,
+   'scrapy_splash.SplashMiddleware': 725,
+   'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
+}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
@@ -85,7 +91,7 @@ ITEM_PIPELINES = {
 #HTTPCACHE_EXPIRATION_SECS = 0
 #HTTPCACHE_DIR = "httpcache"
 #HTTPCACHE_IGNORE_HTTP_CODES = []
-#HTTPCACHE_STORAGE = "scrapy.extensions.httpcache.FilesystemCacheStorage"
+HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
 
 # Set settings whose default value is deprecated to a future-proof value
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"

@@ -11,8 +11,19 @@ from asgiref.sync import sync_to_async
 from hotel_room.models import HotelRoom
 from hotel_room_service.models import HotelRoomService
 from typing import List
+import scrapy
+import requests
 
 class ScrapingRoomsPipeline:
+    
+    def __init__(self):
+        self.is_spider_closed = False
+        
+    @classmethod
+    def from_crawler(cls, crawler):
+        pipeline = cls()
+        crawler.signals.connect(pipeline.spider_closed, signal=scrapy.signals.spider_closed)
+        return pipeline
     
     def bind_description(self, words:List[str]):
         final_words = words.pop(0)
@@ -39,7 +50,7 @@ class ScrapingRoomsPipeline:
             hotel_room_data['services'] = item.get('services', ['Without additional services'])
             
             if hotel_room_data['name'] != 'Without name':
-                print(hotel_room_data)
+                print("INFO HOTEL:\n", hotel_room_data)
                 if hotel_room_data['discount'] != 'False':
                     hotel_room_data['discount'] = True 
                 else:
@@ -55,11 +66,23 @@ class ScrapingRoomsPipeline:
                     discount = hotel_room_data['discount'],
                 )   
                 
-                for service in hotel_room_data['services']:
-                     HotelRoomService.objects.create(hotel_room_id=hotel_room, service=service)
+                # for service in hotel_room_data['services']:
+                #      HotelRoomService.objects.create(hotel_room_id=hotel_room, service=service)
             
         except Exception as e:
             print('Error strange detected:', e)
             traceback.print_exc()
             
         return item
+
+    def spider_closed(self, spider):
+        self.is_spider_closed = True
+        self.execute_additional_function()
+    
+    def close_splash():
+        url = 'http://localhost:8050/stop'
+        response = requests.post(url)
+        if response.status_code == 200:
+            print('El servidor Splash se cerró correctamente.')
+        else:
+            print('Hubo un error al cerrar el servidor Splash.')

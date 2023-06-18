@@ -4,14 +4,18 @@ from scrapy.loader import ItemLoader
 from itemloaders.processors import MapCompose 
 from scrapy.linkextractors import LinkExtractor
 from scraping_rooms.items import HotelRoomItem
- 
+from scrapy_splash import SplashRequest
  
 class TripadvisorSpider(CrawlSpider):
     name = "TripadvisorSpider"
     allowed_domains = ['tripadvisor.co']
     start_urls = ["https://www.tripadvisor.co/Hotels-g294073-Colombia-Hotels.html"]
+    
+    def start_requests(self):
+        for url in self.start_urls:
+            yield SplashRequest(url, self.parse, args={'wait': 0.5})
      
-    download_delay = 0.5 #!
+    download_delay = 1 #!
     
     custom_settings = {
         'USER_AGENT': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
@@ -51,7 +55,8 @@ class TripadvisorSpider(CrawlSpider):
         sel = Selector(response)
         item = ItemLoader(HotelRoomItem(), sel)
         item.add_xpath('name','//*[@id="HEADING"]//text()') 
-        # item.add_xpath('description', '//div[@id="ABOUT_TAB"]/div[2]/div[1]/div[4]/div[1]/div[1]/div[1]/p[1]/text()') 
+        item.add_xpath('description', '//*[@id="ABOUT_TAB"]/div[2]/div[1]/div[4]/div[1]/div[1]/div[1]/p//text()') 
+        item.add_xpath('description', '//*[@id="ABOUT_TAB"]/div[2]/div[1]/div[3]/div/div[1]/text()') 
         # item.add_xpath('description', '//div[@id="ABOUT_TAB"]//text()')   
         item.add_xpath('price', '//div[@data-sizegroup="hr_chevron_prices"]/text()', MapCompose(self.clean_price)) #! TODO: Change later to select the lower price
         item.add_xpath('price', '//div[@data-automation="tab-bar-offer-price"]/div[1]//text()', MapCompose(self.clean_price)) 
