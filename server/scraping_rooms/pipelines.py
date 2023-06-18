@@ -9,9 +9,16 @@ from itemadapter import ItemAdapter
 import traceback
 from asgiref.sync import sync_to_async
 from hotel_room.models import HotelRoom
-
+from typing import List
 
 class ScrapingRoomsPipeline:
+    
+    def bind_description(self, words:List[str]):
+        final_words = words.pop(0)
+        for word in words:
+            final_words = final_words + "\n" + word
+        return final_words.strip()
+    
     async def process_item(self, item, spider):
         await self.save_item(item, spider)
         return item
@@ -21,18 +28,23 @@ class ScrapingRoomsPipeline:
         try:
             hotel_room_data = {}
             hotel_room_data['name'] = item.get('name', ['Without name'])[0]
-            hotel_room_data['description'] = item.get('description', ['Without description'])[0]
+            hotel_room_data['description'] = item.get('description', ['Without description'])
             hotel_room_data['price'] = item.get('price', [-1])
             hotel_room_data['score'] = item.get('score', [-1])[0]
             hotel_room_data['geolocation'] = item.get('geolocation', ['Without geolocation'])[0]
             hotel_room_data['link'] = item.get('link', ['Without link'])[0]
-            hotel_room_data['discount'] = item.get('discount', [False])[0]
-            print('OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO')
+            hotel_room_data['discount'] = item.get('discount', ['False'])[0]
+            
             if hotel_room_data['name'] != 'Without name':
                 print(hotel_room_data)
+                if hotel_room_data['discount'] != 'False':
+                    hotel_room_data['discount'] = True 
+                else:
+                    hotel_room_data['discount'] = False
+                    
                 HotelRoom.objects.create(
                     name = hotel_room_data['name'],
-                    description = hotel_room_data['description'],
+                    description = self.bind_description(hotel_room_data['description']), 
                     price = min(hotel_room_data['price']),
                     score = hotel_room_data['score'],
                     geolocation = hotel_room_data['geolocation'],
