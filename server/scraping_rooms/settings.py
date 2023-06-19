@@ -12,6 +12,24 @@ BOT_NAME = "scraping_rooms"
 SPIDER_MODULES = ["scraping_rooms.spiders"]
 NEWSPIDER_MODULE = "scraping_rooms.spiders"
 
+# Splash Setup 
+SPLASH_URL = 'http://localhost:8050'
+
+DOWNLOADER_MIDDLEWARES = {
+   #"scraping_rooms.middlewares.ScrapingRoomsDownloaderMiddleware": 543, #!
+    'scrapy_splash.SplashCookiesMiddleware': 723,
+    'scrapy_splash.SplashMiddleware': 725,
+    'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
+}
+
+SPIDER_MIDDLEWARES = {
+   #"scraping_rooms.middlewares.ScrapingRoomsSpiderMiddleware": 543, #!
+    'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+}
+
+DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
+
+HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "scraping_rooms (+http://www.yourdomain.com)"
@@ -42,23 +60,24 @@ DOWNLOAD_DELAY = 1 #! 1 second per search
 #    "Accept-Language": "en",
 #}
 
-DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
 
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-SPIDER_MIDDLEWARES = {
-   # "scraping_rooms.middlewares.ScrapingRoomsSpiderMiddleware": 543, #!
-   'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
-}
+# SPIDER_MIDDLEWARES = {
+#    "scraping_rooms.middlewares.ScrapingRoomsSpiderMiddleware": 543, #!
+#    'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+# }
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-DOWNLOADER_MIDDLEWARES = {
-   # "scraping_rooms.middlewares.ScrapingRoomsDownloaderMiddleware": 543, #!
-   'scrapy_splash.SplashCookiesMiddleware': 723,
-   'scrapy_splash.SplashMiddleware': 725,
-   'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
-}
+# DOWNLOADER_MIDDLEWARES = {
+#    # "scraping_rooms.middlewares.ScrapingRoomsDownloaderMiddleware": 543, #!
+#    'scrapy_splash.SplashCookiesMiddleware': 723,
+#    'scrapy_splash.SplashMiddleware': 725,
+#    'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
+# }
+
+
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
@@ -91,7 +110,6 @@ ITEM_PIPELINES = {
 #HTTPCACHE_EXPIRATION_SECS = 0
 #HTTPCACHE_DIR = "httpcache"
 #HTTPCACHE_IGNORE_HTTP_CODES = []
-HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
 
 # Set settings whose default value is deprecated to a future-proof value
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"

@@ -8,22 +8,13 @@
 from itemadapter import ItemAdapter
 import traceback
 from asgiref.sync import sync_to_async
-from hotel_room.models import HotelRoom
-from hotel_room_service.models import HotelRoomService
+# from hotel_room_service.models import HotelRoomService
 from typing import List
 import scrapy
 import requests
 
 class ScrapingRoomsPipeline:
-    
-    def __init__(self):
-        self.is_spider_closed = False
-        
-    @classmethod
-    def from_crawler(cls, crawler):
-        pipeline = cls()
-        crawler.signals.connect(pipeline.spider_closed, signal=scrapy.signals.spider_closed)
-        return pipeline
+     
     
     def bind_description(self, words:List[str]):
         final_words = words.pop(0)
@@ -38,6 +29,9 @@ class ScrapingRoomsPipeline:
     @sync_to_async
     def save_item(self, item, spider):
         try:
+            from django import setup
+            setup() #! without this, the pipeline can't save the object in the BD, it's to activate the Django Server applications
+            from hotel_room.models import HotelRoom
             hotel_room_data = {}
             hotel_room_data['name'] = item.get('name', ['Without name'])[0]
             hotel_room_data['description'] = item.get('description', ['Without description'])
@@ -75,14 +69,4 @@ class ScrapingRoomsPipeline:
             
         return item
 
-    def spider_closed(self, spider):
-        self.is_spider_closed = True
-        self.execute_additional_function()
     
-    def close_splash():
-        url = 'http://localhost:8050/stop'
-        response = requests.post(url)
-        if response.status_code == 200:
-            print('El servidor Splash se cerró correctamente.')
-        else:
-            print('Hubo un error al cerrar el servidor Splash.')

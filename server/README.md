@@ -1,23 +1,62 @@
-## How to execute the code
+# How to execute the code
 
-To create the virtual environment download the "virtualenv" library via pip.
 
+## To create Splash server to make scraping with JavaScript downloaded components
 <br>
 
-Windows:
+Create a docker with Splash to scrapy :
 
 ```
-pip install virtualenv 
+docker run --name mi_splash -p 8050:8050 scrapinghub/splash
+```
+<br>
+To verify if Splash server was created successfully, search the next link in a browser:
+
+```
+http://localhost:8050/
 ```
 
-Linux:
+<br>
+If you want to close the container (Linux):
 
 ```
-pip3 install virtualenv 
+sudo docker stop mi_splash
 ```
+
+
+If you want to open the container again (Linux):
+
+```
+sudo docker start mi_splash
+```
+<br>
+
+**Note**: If you run the code to scrapy without to start the splash server, the spiders will only turn on and then turn off immediately.
+
+<br>
+<hr>
+
+
+## To create the virtual environment with venv.
+
+Download the code:
+
+```
+git clone git@github.com:proyecto-aplicaciones-web/scraping-hotels.git
+```
+
+Go to the backend folder:
+
+```
+cd server/
+```
+
+
 
 <br> 
+
 Create the virtual environment with named "venv"
+
 <br>
 Windows:
 
@@ -33,7 +72,7 @@ python3 -m venv venv
 
 <br>
 To run the virtual environment (from the root folder): <br>
-In Windows:<br>
+In Windows (Powershell):<br>
 
 ```
 .\venv\Scripts\activate
@@ -46,7 +85,7 @@ source venv\bin\activate
 ```
 
 <br>
-Perform the dependency installations (try to have executed the virtual environment):
+Perform dependency installations (remember running the virtual environment):
 
 Windows:
 
@@ -61,7 +100,7 @@ pip3 install -r requirements.txt
 ```
 
 <br>
-Perform the dependency installations (try to have run the virtual environment):
+Perform the dependency installations (remember running the virtual environment):
 
 Windows:
 

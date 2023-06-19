@@ -1,21 +1,71 @@
-from scrapy.spiders import CrawlSpider, Rule
+from scrapy.spiders import CrawlSpider, Rule, Spider
 from scrapy.selector import Selector
 from scrapy.loader import ItemLoader
 from itemloaders.processors import MapCompose 
 from scrapy.linkextractors import LinkExtractor
 from scraping_rooms.items import HotelRoomItem
-from scrapy_splash import SplashRequest
+from scrapy_splash import SplashRequest, SplashTextResponse, SplashJsonResponse
+from scrapy.http import HtmlResponse
+import scrapy
  
 class TripadvisorSpider(CrawlSpider):
     name = "TripadvisorSpider"
     allowed_domains = ['tripadvisor.co']
-    start_urls = ["https://www.tripadvisor.co/Hotels-g294073-Colombia-Hotels.html"]
+    start_urls = ("https://www.tripadvisor.co/Hotels-g294073-Colombia-Hotels.html",)
     
+    # def start_requests(self): 
+    #     for url in self.start_urls:
+    #         # yield SplashRequest(url=url, callback=self.parser_hotel_room, args={'wait': 0.5})
+    #         yield scrapy.Request(url=url, callback=self. self.parser_hotel_room)
+
     def start_requests(self):
+        lua_script = """
+function main(splash):
+   assert(splash:wait(5))
+   return splash:html()
+"""
         for url in self.start_urls:
-            yield SplashRequest(url, self.parser_hotel_room, args={'wait': 0.5})
+            # yield SplashRequest(url, 'parser_hotel_room', endpoint='render.html', args={'lua_source': lua_script, 'wait': 0.5})
+            yield SplashRequest(url, args={'wait': 0.1}, meta={'real_url': url})
+    
      
-    download_delay = 1 #!
+    # def process_request(self, request):
+    #     request.meta.update(splash={
+    #         'endpoint': 'render.html',
+    #         'args': {'wait': 0.5},
+    #         'splash_headers': {
+    #             'User-Agent': self.custom_settings['USER_AGENT']
+    #         }
+    #     })
+    #     return request
+
+    # FFFFF
+    def use_splash(self, request, response): #!
+        request.meta['splash'] = {
+            'endpoint': 'render.html',
+            'args': {
+                'wait': 0.1
+            }
+        }
+        return request
+
+    def _requests_to_follow(self, response): #!
+        if not isinstance(response, (HtmlResponse, SplashTextResponse, SplashJsonResponse)):
+            return
+        seen = set()
+        for rule_index, rule in enumerate(self._rules):
+            links = [
+                lnk
+                for lnk in rule.link_extractor.extract_links(response)
+                if lnk not in seen
+            ]
+            for link in rule.process_links(links):
+                seen.add(link)
+                request = self._build_request(rule_index, link)
+                yield rule.process_request(request, response)
+    # FFFF0
+    
+    # download_delay = 1 #!
     
     custom_settings = {
         'USER_AGENT': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
@@ -52,11 +102,13 @@ class TripadvisorSpider(CrawlSpider):
            return -1.0
    
     def parser_hotel_room(self, response):
+        print('OOOOOOOOOOOOOOOOOOOOOOHHHHHHHHHHHHHHHHHHH!!!!!!!!!!!!!!!!!')
         sel = Selector(response)
         item = ItemLoader(HotelRoomItem(), sel)
         item.add_xpath('name','//*[@id="HEADING"]//text()') 
         item.add_xpath('description', '//*[@id="ABOUT_TAB"]/div[2]/div[1]/div[4]/div[1]/div[1]/div[1]/p//text()') 
-        item.add_xpath('description', '//*[@id="ABOUT_TAB"]/div[2]/div[1]/div[3]/div/div[1]/text()') 
+        item.add_xpath('description', '//*[@id="ABOUT_TAB"]/div[2]/div[1]/div[3]/div/div[1]//text()') 
+        # item.add_xpath('description', '//*[@id="ABOUT_TAB"]/div[2]/div[1]/div[3]/div/div[1]/text()') 
         # item.add_xpath('description', '//div[@id="ABOUT_TAB"]//text()')   
         item.add_xpath('price', '//div[@data-sizegroup="hr_chevron_prices"]/text()', MapCompose(self.clean_price)) #! TODO: Change later to select the lower price
         item.add_xpath('price', '//div[@data-automation="tab-bar-offer-price"]/div[1]//text()', MapCompose(self.clean_price)) 
