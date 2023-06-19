@@ -45,18 +45,26 @@ class ScrapingRoomsPipeline:
                 else:
                     hotel_room_data['discount'] = False
                     
-                hotel_room = HotelRoom.objects.create(
-                    name = hotel_room_data['name'],
-                    description = self.bind_description(hotel_room_data['description']), 
-                    price = min(hotel_room_data['price']),
-                    score = hotel_room_data['score'],
-                    geolocation = hotel_room_data['geolocation'],
-                    link = hotel_room_data['link'],
-                    discount = hotel_room_data['discount'],
-                )   
                 
-                for service in hotel_room_data['services']:
-                     HotelRoomService.objects.create(hotel_room_id=hotel_room, service=service)
+                try:
+                    hotel_room = HotelRoom.objects.get(name=hotel_room_data['name'])
+                    hotel_room.price = min(hotel_room_data['price'])
+                    hotel_room.discount = hotel_room_data['discount']
+                    hotel_room.score = hotel_room_data['score']
+                except HotelRoom.DoesNotExist:
+                    print('REGISTERING NEW HOTELROOM!!!!!!!!!!!!!!!!!!!!!')
+                    hotel_room = HotelRoom.objects.create(
+                        name = hotel_room_data['name'],
+                        description = self.bind_description(hotel_room_data['description']), 
+                        price = min(hotel_room_data['price']),
+                        score = hotel_room_data['score'],
+                        geolocation = hotel_room_data['geolocation'],
+                        link = hotel_room_data['link'],
+                        discount = hotel_room_data['discount'],
+                    )   
+                    
+                    for service in hotel_room_data['services']:
+                        HotelRoomService.objects.create(hotel_room_id=hotel_room, service=service)
             
         except Exception as e:
             print('Error strange detected:', e)
