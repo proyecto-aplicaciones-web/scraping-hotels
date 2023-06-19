@@ -51,8 +51,11 @@ class TripadvisorSpider(CrawlSpider):
         sel = Selector(response)
         item = ItemLoader(HotelRoomItem(), sel)
         item.add_xpath('name','//*[@id="HEADING"]//text()') 
-        # item.add_xpath('description', '//div[@id="ABOUT_TAB"]/div[2]/div[1]/div[4]/div[1]/div[1]/div[1]/p[1]/text()') 
-        # item.add_xpath('description', '//div[@id="ABOUT_TAB"]//text()')   
+        item.add_xpath('description', '//*[@id="ABOUT_TAB"]//*[@class="fIrGe _T"]//text()') 
+        item.add_xpath('description', '//*[@id="ABOUT_TAB"]/div[2]/div[1]//text()') 
+        item.add_xpath('description', '//*[@id="ABOUT_TAB"]/div[2]/div[1]/div[4]/div/div//text()') 
+        item.add_xpath('description', '//*[@id="ABOUT_TAB"]/div[2]/div[1]/div[4]/div[1]/div[1]/div[1]/p//text()') 
+        item.add_xpath('description', '//*[@id="ABOUT_TAB"]/div[2]/div[1]/div[3]/div/div[1]//text()')    
         item.add_xpath('price', '//div[@data-sizegroup="hr_chevron_prices"]/text()', MapCompose(self.clean_price)) #! TODO: Change later to select the lower price
         item.add_xpath('price', '//div[@data-automation="tab-bar-offer-price"]/div[1]//text()', MapCompose(self.clean_price)) 
         item.add_xpath('price', '//div[@class="premium_offers_area offers"]/div[2]/a/div[1]/div[2]//text()', MapCompose(self.clean_price)) 
