@@ -107,7 +107,7 @@ function RoomDetails() {
 						</div>
 					</div>
 				</div>
-				<div className="max-w-4xl mx-auto pt-12">
+				<div className="max-w-4xl mx-auto pt-8">
 					<GoogleMap />
 				</div>
 			</div>

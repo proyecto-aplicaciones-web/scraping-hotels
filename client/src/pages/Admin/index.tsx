@@ -75,21 +75,6 @@ function Sidebar({ isOpen, onClose }: SidebarProps) {
 							</ul>
 						</div>
 					</div>
-					<div className="mt-6">
-						<span className="inline-block text-lg text-primary font-semibold ml-2 mb-1">Reports</span>
-						<ul className="space-y-1">
-							<Link to='./report-one'>
-								<li className="hover:bg-primary/40 transition-colors rounded-md p-2">
-									Report one
-								</li>
-							</Link>
-							<Link to='./report-two'>
-								<li className="hover:bg-primary/40 transition-colors rounded-md p-2">
-									Report two
-								</li>
-							</Link>
-						</ul>
-					</div>
 				</div>
 				<button className="flex justify-center items-center gap-2 text-secondary hover:text-white transition-colors hover:bg-secondary px-2 py-2 rounded-md" onClick={ onLogout }>
 					<AdminPanelSettings />
