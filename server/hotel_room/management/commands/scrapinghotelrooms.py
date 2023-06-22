@@ -14,5 +14,5 @@ class Command(BaseCommand):
         process.crawl('BookingSpider')
         # process.crawl('KayakSpider')
         # process.crawl('SkyscannerSpider')
-        # process.crawl('TripadvisorSpider')
+        process.crawl('TripadvisorSpider')
         process.start() 
