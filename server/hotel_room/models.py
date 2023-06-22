@@ -8,6 +8,6 @@ class HotelRoom(models.Model):
     price = models.FloatField()
     score = models.FloatField()
     geolocation = models.TextField()
-    link = models.URLField()
+    link = models.URLField(max_length=1000)
     discount = models.BooleanField()
     

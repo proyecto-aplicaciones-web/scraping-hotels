@@ -19,5 +19,5 @@ class HotelRoomItem(Item):
     services = Field()
     
     # To model with images
-    # image = Field() 
+    images = Field() 
     

@@ -11,8 +11,8 @@ class Command(BaseCommand):
         # settings.set('LOG_ENABLED', False ,priority='cmdline')
         process = CrawlerProcess(settings)
 
-        # process.crawl('BookingSpider')
+        process.crawl('BookingSpider')
         # process.crawl('KayakSpider')
-        process.crawl('SkyscannerSpider')
+        # process.crawl('SkyscannerSpider')
         # process.crawl('TripadvisorSpider')
         process.start() 

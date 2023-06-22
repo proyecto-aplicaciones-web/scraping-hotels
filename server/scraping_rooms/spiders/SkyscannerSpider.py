@@ -50,7 +50,7 @@ class SkyscannerSpider(CrawlSpider):
     def clean_score(self, price:str):
        new_price = price.replace(',','.').replace(' ','').strip()
        if new_price:
-           return round(float(new_price)/2, 1)
+           return round(float(new_price)/1, 1)
        else:
            return -1.0
    

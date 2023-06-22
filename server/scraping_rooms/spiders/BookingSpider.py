@@ -1,6 +1,75 @@
-"""
-- tripadvisor https://www.tripadvisor.co/Hotels-g34438-oa90-Miami_Florida-Hotels.html 
-- booking https://www.booking.com/searchresults.es.html?label=gog235jc-1DCAMYAijsATidA0gKWANoMogBAZgBCrgBF8gBD9gBA-gBAfgBAogCAagCA7gCucCvowbAAgHSAiRlOTgzYzE2NC01ZTIwLTQxZWYtYmNmYS00M2JkNTFjNmZkNzbYAgTgAgE&sid=4c70767c1d5dc0ce44dbc7c280da7b3f&aid=356980&city=20023181&nflt=sth%253D7&pptfromtl=7&src=theme_landing_city&offset=25
-- kayak https://www.kayak.com.co/hotels/Miami,Florida,Estados-Unidos-c14305/2023-05-23/2023-05-24/2adults?sort=rank_a
-- skyscanner https://www.espanol.skyscanner.com/hotels/search?entity_id=27536644&checkin=2023-05-29&checkout=2023-05-30&adults=2&rooms=1&impression_id=440d1f4e-08be-4679-bcb0-6701d53042a8
-"""
+from scrapy.spiders import CrawlSpider, Rule
+from scrapy.selector import Selector
+from scrapy.loader import ItemLoader
+from itemloaders.processors import MapCompose 
+from scrapy.linkextractors import LinkExtractor
+from scraping_rooms.items import HotelRoomItem
+from datetime import datetime, timedelta
+
+def get_date_days_after(days:int)->str:
+    current_date = datetime.now()
+    date_after = current_date + timedelta(days=days)
+    return date_after.strftime('%Y-%m-%d')
+ 
+class BookingSpider(CrawlSpider):
+    name = "BookingSpider"
+    allowed_domains = ['booking.com']
+    start_urls = [f"https://www.booking.com/searchresults.es.html?ss=Colombia&ssne=Colombia&ssne_untouched=Colombia&aid=304142&lang=es&sb=1&src_elem=sb&src=searchresults&dest_id=47&dest_type=country&checkin={get_date_days_after(2)}&checkout={get_date_days_after(3)}&group_adults=2&no_rooms=1&group_children=0"]
+    # https://www.booking.com/searchresults.es.html?ss=Colombia&ssne=Colombia&ssne_untouched=Colombia&aid=304142&lang=es&sb=1&src_elem=sb&src=searchresults&dest_id=47&dest_type=country&checkin=2023-06-24&checkout=2023-06-26&group_adults=2&no_rooms=1&group_children=0 
+     
+    download_delay = 1 #!
+    
+    custom_settings = {
+        'USER_AGENT': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
+        # 'CLOSESPIDER_PAGECOUNT': 8, #!
+        'CLOSESPIDER_ITEMCOUNT': 2, #!
+        'DOWNLOAD_DELAY': 1,
+    }
+    
+    rules = (
+        Rule(
+            LinkExtractor(
+                allow=r'/searchresults'
+            ), follow=True
+        ),
+        Rule(
+            LinkExtractor( 
+                allow=r'booking.com/hotel/'
+            ), follow=True, callback='parser_hotel_room' 
+        ), 
+    )
+    
+    def clean_price(self, price:str):
+       new_price = price.replace('$','').replace('.','').replace(' ','').replace('COP','').strip()
+       if new_price:
+           return float(new_price)
+       else:
+           return -1.0
+       
+    def clean_score(self, price:str):
+       new_price = price.replace(',','.').replace(' ','').strip()
+       if new_price:
+           return round(float(new_price)/2, 1)
+       else:
+           return -1.0
+   
+    def parser_hotel_room(self, response):
+        sel = Selector(response)
+        item = ItemLoader(HotelRoomItem(), sel)
+        item.add_xpath('name','//*[@id="hp_hotel_name"]//h2//text()') 
+        item.add_xpath('description', '//*[@id="summary"]/div/div/p//text()')  
+        item.add_xpath('price', '//*[@class="prco-valign-middle-helper"]//text()', MapCompose(self.clean_price))  
+        item.add_xpath('score','//div[@data-testid="review-score-component"]//div[1]//text()', MapCompose(self.clean_score)) 
+        item.add_xpath('geolocation','//p[@class="address address_clean"]/span[1]//text()') 
+        item.add_value('link', [response.url]) 
+        item.add_xpath('discount', '//*[@id="hprt-table"]//span[@data-bui-component="Badge"]//text()')
+        item.add_xpath('images', '//a[@data-preview-image-layout="main"]/img/@src')
+        item.add_xpath('images', '//a[@data-preview-image-layout="thumbnail"]/img/@src')
+        item.add_xpath('services', '//div[@data-testid="property-section--content"]//div[@data-testid="property-most-popular-facilities-wrapper"]//div//span/div/span//text()')
+        yield item.load_item()
+    
+    
+    
+    
+        
+        
