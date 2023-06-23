@@ -65,11 +65,11 @@ class ScrapingRoomsPipeline:
                         discount = hotel_room_data['discount'],
                     )   
                     
-                    for service in hotel_room_data['services']:
-                        HotelRoomService.objects.create(hotel_room_id=hotel_room, service=service)
+                    # for service in hotel_room_data['services']:
+                    #     HotelRoomService.objects.create(hotel_room_id=hotel_room, service=service)
                     
-                    for image in hotel_room_data['images']:
-                        HotelRoomImage.objects.create(hotel_room_id=hotel_room, image=image)
+                    # for image in hotel_room_data['images']:
+                    #     HotelRoomImage.objects.create(hotel_room_id=hotel_room, image=image)
             
         except Exception as e:
             print('Error strange detected:', e)

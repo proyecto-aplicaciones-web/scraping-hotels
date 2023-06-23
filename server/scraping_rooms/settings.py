@@ -1,3 +1,12 @@
+import sys
+import platform
+from shutil import which
+import os
+
+# Obtain the geckodriver absolute path
+base_dir = os.path.dirname(os.path.abspath(__file__)) 
+driver_path = os.path.join(base_dir, 'spiders', 'chromedriver')
+print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>", driver_path)
 # Scrapy settings for scraping_rooms project
 #
 # For simplicity, this file contains only settings considered important or
@@ -48,11 +57,38 @@ DOWNLOAD_DELAY = 0.5 #! 0.5 seconds per search
 #    "scraping_rooms.middlewares.ScrapingRoomsSpiderMiddleware": 543,
 #}
 
+
+
+
+
+### SELENIUM
+
+def get_geckodriver_path():
+    os = platform.system().lower()
+    
+    if os == 'windows':
+        return './web_drivers/geckodriver.exe'
+    elif os == 'linux':
+        return './web_drivers/geckodriver_linux'
+    else:
+        raise Exception('Sistema operativo no compatible')
+     
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    "scraping_rooms.middlewares.ScrapingRoomsDownloaderMiddleware": 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+   # "scraping_rooms.middlewares.ScrapingRoomsDownloaderMiddleware": 543,
+   'scrapy_selenium.SeleniumMiddleware': 800,
+}
+SELENIUM_DRIVER_NAME = 'chrome'
+# SELENIUM_DRIVER_EXECUTABLE_PATH = get_geckodriver_path()
+SELENIUM_DRIVER_EXECUTABLE_PATH = which('chromedriver') 
+# SELENIUM_DRIVER_EXECUTABLE_PATH = driver_path
+SELENIUM_DRIVER_ARGUMENTS=['--headless'] 
+SELENIUM_COMMAND_EXECUTOR='http://localhost:4444/wd/hub' 
+
+# MOZILLA_DRIVER_PATH = driver_path
+# SELENIUM_BROWSER_EXECUTABLE_PATH = which('firefox')
+# SELENIUM_COMMAND_EXECUTOR = 'http://localhost:4444/wd/hub'
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
