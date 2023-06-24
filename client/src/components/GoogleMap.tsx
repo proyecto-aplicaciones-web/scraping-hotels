@@ -5,9 +5,11 @@ import { memo, useEffect, useState } from 'react';
 
 type Position = { lat: number, lng: number; };
 
-const address = 'Transversal 6, 27 - 85 Centro Internacional. Bogotá 110311 Colombia';
+interface GoogleMapProps {
+	address: string;
+}
 
-function GoogleMap() {
+function GoogleMap({ address }: GoogleMapProps) {
 	const { isLoaded } = useJsApiLoader({
 		id: 'google-map-script',
 		googleMapsApiKey: CONFIG.GOOGLE_MAPS_KEY

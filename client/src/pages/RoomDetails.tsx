@@ -4,10 +4,11 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { GoogleMap, Loader } from "components";
 import { QUERY_KEYS } from "config/tanstackQuery";
 import { useAuth } from "context/AuthContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Slider, { Settings } from "react-slick";
 import { RoomService, UserQueryService } from "services";
+import { formatCurrency } from "utils";
 
 const settings: Settings = {
 	dots: true,
@@ -15,7 +16,7 @@ const settings: Settings = {
 	speed: 500,
 	slidesToShow: 1,
 	slidesToScroll: 1,
-	autoplay: true,
+	autoplay: false,
 	autoplaySpeed: 3000,
 	pauseOnHover: false,
 	arrows: false,
@@ -25,10 +26,16 @@ function RoomDetails() {
 	const { roomId } = useParams();
 	const { auth } = useAuth();
 	const navigate = useNavigate();
+	const [isFirstLoad, setIsFirstLoad] = useState<boolean>(false);
 
 	const { data: room, isLoading } = useQuery({
 		queryKey: [QUERY_KEYS.ROOM, roomId],
-		queryFn: () => RoomService.getRoomById(parseInt(roomId!))
+		queryFn: () => RoomService.getRoomById(parseInt(roomId!)),
+		onSuccess: () => {
+			if (auth?.role === 'admin' && !isFirstLoad) return;
+			setIsFirstLoad(true);
+			incrementVisits();
+		}
 	});
 
 	const { mutate: incrementVisits } = useMutation({
@@ -37,11 +44,6 @@ function RoomDetails() {
 			roomId: parseInt(roomId!)
 		})
 	});
-
-	useEffect(() => {
-		if (auth?.role === 'admin') return;
-		incrementVisits();
-	}, []);
 
 	const goBack = () => navigate(-1);
 
@@ -64,13 +66,17 @@ function RoomDetails() {
 						<Slider { ...settings } className="mx-auto lg:mx-0 max-w-full sm:max-w-lg lg:max-w-fit col-span-1">
 							{ room.images.map(image => (
 								<picture key={ image.id } className="px-2">
-									<img src={ image.image } alt={ `${room.name} image ${image.id}` } />
+									<img className="mx-auto" src={ image.image } alt={ `${room.name} image ${image.id}` } />
 								</picture>
 							)) }
 						</Slider>
+					) : room.images.length ? (
+						<picture className="max-w-lg lg:max-w-fit">
+							<img className="mx-auto" src={ room.images[0].image } alt={ `${room.name} image` } />
+						</picture>
 					) : (
 						<picture className="max-w-lg lg:max-w-fit">
-							<img src={ room.images[0].image } alt={ `${room.name} image` } />
+							<img src="https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg" alt="no image" />
 						</picture>
 					) }
 					<div className="col-span-2 flex flex-col justify-around">
@@ -99,16 +105,20 @@ function RoomDetails() {
 							</div>
 							<div className="flex flex-col items-end gap-2">
 								<a className="flex justify-between gap-4 items-center p-2 rounded-sm border border-primary text-primary" href={ room.link } target="_blank">
-									<span className="pr-1 text-lg tracking-wide italic">$ { room.price }</span>
+									{ room.price === -1 ? (
+										<span>Book now!</span>
+									) : (
+										<span>{ formatCurrency(room.price) }</span>
+									) }
 									<OpenInNewOutlined />
 								</a>
-								<Rating name="half-rating-read" defaultValue={ room.score / 2 } precision={ 0.5 } readOnly />
+								<Rating name="half-rating-read" defaultValue={ room.score === -1 ? 3 : room.score / 2 } precision={ 0.5 } readOnly />
 							</div>
 						</div>
 					</div>
 				</div>
 				<div className="max-w-4xl mx-auto pt-8">
-					<GoogleMap />
+					<GoogleMap address={ room.geolocation } />
 				</div>
 			</div>
 		</main>

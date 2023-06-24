@@ -37,8 +37,8 @@ class ScrapingRoomsPipeline:
             hotel_room_data['link'] = item.get('link', ['Without link'])[0]
             hotel_room_data['discount'] = item.get('discount', ['False'])[0]
             
-            hotel_room_data['services'] = item.get('services', ['Without additional services'])
-            hotel_room_data['images'] = item.get('images', ['Without additional images'])
+            hotel_room_data['services'] = item.get('services', [])
+            hotel_room_data['images'] = item.get('images', [])
             
             if hotel_room_data['name'] != 'Without name':
                 print(hotel_room_data)
