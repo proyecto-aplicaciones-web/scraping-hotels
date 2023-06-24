@@ -17,13 +17,13 @@ class BookingSpider(CrawlSpider):
     start_urls = [f"https://www.booking.com/searchresults.es.html?ss=Colombia&ssne=Colombia&ssne_untouched=Colombia&aid=304142&lang=es&sb=1&src_elem=sb&src=searchresults&dest_id=47&dest_type=country&checkin={get_date_days_after(2)}&checkout={get_date_days_after(3)}&group_adults=2&no_rooms=1&group_children=0"]
     # https://www.booking.com/searchresults.es.html?ss=Colombia&ssne=Colombia&ssne_untouched=Colombia&aid=304142&lang=es&sb=1&src_elem=sb&src=searchresults&dest_id=47&dest_type=country&checkin=2023-06-24&checkout=2023-06-26&group_adults=2&no_rooms=1&group_children=0 
      
-    download_delay = 1 #!
+    download_delay = 0.5 #!
     
     custom_settings = {
         'USER_AGENT': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
         # 'CLOSESPIDER_PAGECOUNT': 8, #!
-        'CLOSESPIDER_ITEMCOUNT': 2, #!
-        'DOWNLOAD_DELAY': 1,
+        'CLOSESPIDER_ITEMCOUNT': 10, #!
+        'DOWNLOAD_DELAY': 0.5,
     }
     
     rules = (
