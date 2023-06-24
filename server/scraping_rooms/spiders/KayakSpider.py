@@ -5,6 +5,10 @@ from itemloaders.processors import MapCompose
 from scrapy.linkextractors import LinkExtractor
 from scraping_rooms.items import HotelRoomItem
 from datetime import datetime, timedelta
+from scrapy_selenium import SeleniumRequest
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 def get_date_days_after(days:int)->str:
     current_date = datetime.now()
@@ -14,7 +18,11 @@ def get_date_days_after(days:int)->str:
 class KayakSpider(CrawlSpider):
     name = "KayakSpider"
     allowed_domains = ['tripadvisor.co']
-    start_urls = [f"https://www.kayak.com.co/hotels/Colombia-u53/{get_date_days_after(2)}/{get_date_days_after(3)}/2adults?sort=rank_a", f"https://www.kayak.com.co/hotels/Four-Points-by-Sheraton-Medellin,Medellin-c30430-h42183-details/{get_date_days_after(2)}/{get_date_days_after(3)}/2adults?psid=dlDkMuEKJw#overview"]
+    # start_urls = [f"https://www.kayak.com.co/hotels/Colombia-u53/{get_date_days_after(2)}/{get_date_days_after(3)}/2adults?sort=rank_a", f"https://www.kayak.com.co/hotels/Four-Points-by-Sheraton-Medellin,Medellin-c30430-h42183-details/{get_date_days_after(2)}/{get_date_days_after(3)}/2adults?psid=dlDkMuEKJw#overview"]
+    start_urls = [
+        f"https://www.kayak.com.co/hotels/Faranda-Collection-Barranquilla-Radisson,Barranquilla-c30628-h6039795-details/2023-09-11/2023-09-12/2adults?psid=dnAkJXbPTL#overview"
+        
+        ]
      
     download_delay = 10 #!
     
@@ -24,6 +32,16 @@ class KayakSpider(CrawlSpider):
         'CLOSESPIDER_ITEMCOUNT': 2, #!
         'DOWNLOAD_DELAY': 10,
     }
+    
+    def start_requests(self):
+        # Invocar las reglas y generar las solicitudes de seguimiento
+        for url in self.start_urls:
+            yield SeleniumRequest(
+                url=url,
+                callback=self.parser_hotel_room,
+                wait_time=10,
+                wait_until=EC.presence_of_element_located((By.XPATH, '//*[@class="c3xth-hotel-name"]//text()')),
+        )
     
     rules = (
         Rule(

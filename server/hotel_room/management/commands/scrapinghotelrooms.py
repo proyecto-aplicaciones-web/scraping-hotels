@@ -12,7 +12,7 @@ class Command(BaseCommand):
         process = CrawlerProcess(settings)
 
         # process.crawl('BookingSpider') 
-        # process.crawl('TripadvisorSpider')
-        # process.crawl('HotelesSpider')
+        # process.crawl('TripadvisorSpider') 
         process.crawl('SkyscannerSpider')
+        process.crawl('HotelesSpider')
         process.start() 
