@@ -16,7 +16,7 @@ class TripadvisorSpider(CrawlSpider):
     custom_settings = {
         'USER_AGENT': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
         # 'CLOSESPIDER_PAGECOUNT': 8, #!
-        'CLOSESPIDER_ITEMCOUNT': 10, #!
+        'CLOSESPIDER_ITEMCOUNT': 20, #!
         'DOWNLOAD_DELAY': 0.5,
     }
     
