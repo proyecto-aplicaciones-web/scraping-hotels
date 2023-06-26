@@ -1,68 +1,45 @@
-import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import Ranking from "./Ranking";
+import { useQuery } from '@tanstack/react-query';
 import { MakeScraping } from 'components';
+import { QUERY_KEYS } from 'config/tanstackQuery';
+import { RoomService, UserService } from 'services';
+import Ranking from "./Ranking";
+import RankingChart from './RankingChart';
 
 function Dashboard() {
+	const { data: totalUsers } = useQuery({
+		queryKey: [QUERY_KEYS.USERS_TOTAL_COUNT],
+		queryFn: () => UserService.getTotalCount()
+	});
+
+	const { data: totalRooms } = useQuery({
+		queryKey: [QUERY_KEYS.ROOMS_TOTAL_COUNT],
+		queryFn: () => RoomService.getTotalCount()
+	});
+
 	return (
-		<main className='relative grid grid-cols-12 gap-4 2xl:gap-0'>
+		<main className='relative grid grid-cols-12 gap-2'>
+			<div className="col-span-full sm:col-span-6">
+				<div className='flex justify-center items-center gap-4 bg-primary/20 rounded-lg p-4 uppercase tracking-wider shadow-sm shadow-neutral-600'>
+					<span className='text-md'>users</span>
+					<span className='text-lg md:text-xl text-secondary'>{ totalUsers }</span>
+				</div>
+			</div>
+			<div className="col-span-full sm:col-span-6">
+				<div className='flex justify-center items-center gap-4 bg-primary/50 rounded-lg p-4 uppercase tracking-wider shadow-sm shadow-neutral-600'>
+					<span className='text-md'>rooms</span>
+					<span className='text-lg md:text-xl text-secondary'>{ totalRooms }</span>
+				</div>
+			</div>
 			<div className="col-span-full 2xl:col-span-4">
 				<Ranking />
 			</div>
-			<div className="col-span-full 2xl:col-span-8">
-				<Chart />
+			<div className="col-span-full 2xl:col-span-8 pb-6 md:pb-0">
+				<RankingChart />
 			</div>
 			<div className='fixed right-4 bottom-2'>
 				<MakeScraping />
 			</div>
 		</main>
-	);
-}
-
-const data = [
-	{
-		name: 'Item A',
-		uv: 4000,
-		pv: 2400,
-		amt: 2400,
-	},
-	{
-		name: 'Item B',
-		uv: 3000,
-		pv: 1398,
-		amt: 2210,
-	},
-	{
-		name: 'Item C',
-		uv: 2000,
-		pv: 9800,
-		amt: 2290,
-	},
-	{
-		name: 'Item D',
-		uv: 2780,
-		pv: 3908,
-		amt: 2000,
-	}
-];
-
-function Chart() {
-
-	return (
-		<ResponsiveContainer width="100%" height={ 500 }>
-			<LineChart
-				width={ 500 }
-				height={ 300 }
-				data={ data }
-			>
-				<CartesianGrid strokeDasharray="3 3" />
-				<XAxis dataKey="name" />
-				<YAxis />
-				<Tooltip />
-				<Legend />
-				<Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={ { r: 8 } } />
-				<Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-			</LineChart>
-		</ResponsiveContainer>
 	);
 }
 

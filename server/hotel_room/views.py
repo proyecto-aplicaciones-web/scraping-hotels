@@ -28,6 +28,15 @@ class CustomPagination(PageNumberPagination):
 # Create your views here.
 @csrf_exempt
 @api_view(['GET'])
+def get_rooms_count(request):
+    try:
+        count = HotelRoom.objects.count()
+        return Response({'count': count}, status=status.HTTP_200_OK)
+    except BaseException:
+        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@csrf_exempt
+@api_view(['GET'])
 def get_hotel_rooms(request):
     try:
         pagination = CustomPagination()

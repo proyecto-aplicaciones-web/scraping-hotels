@@ -16,6 +16,28 @@ from .serializers import *
 # Create your views here.
 @csrf_exempt
 @api_view(['GET'])
+def get_users_count(request):
+    try:
+        count = User.objects.count()
+        return Response({'count': count}, status=status.HTTP_200_OK)
+    except BaseException:
+        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@csrf_exempt
+@api_view(['GET'])
+def get_users(request):
+    try:
+        users = User.objects.all().order_by('id')
+        for user in users:
+            user.password = ''
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    except BaseException:
+        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+@csrf_exempt
+@api_view(['GET'])
 def get_users(request):
     try:
         users = User.objects.all().order_by('id')
