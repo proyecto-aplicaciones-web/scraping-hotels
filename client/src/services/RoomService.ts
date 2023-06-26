@@ -11,6 +11,12 @@ export function makeScraping(): Promise<any> {
 	.then(res => res.data);
 }
 
+export function getTotalCount(): Promise<number> {
+	return axios
+	.get('/hotel_room/count/')
+	.then(res => res.data.count);
+}
+
 export function getAll({page}: getAllOptions): Promise<Room[]> {
 	return axios
 	.get(`/hotel_room/?page=${page}&page_size=8`)

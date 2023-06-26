@@ -1,6 +1,12 @@
 import axios from "config/axios";
 import { Auth, User } from "types";
 
+export function getTotalCount(): Promise<number> {
+	return axios
+	.get('/users/count/')
+	.then(res => res.data.count);
+}
+
 export function getAll(): Promise<User[]> {
 	return axios
 	.get('/users/')
