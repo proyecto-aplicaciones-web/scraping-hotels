@@ -1,5 +1,6 @@
 import subprocess
-from django.views.decorators.csrf import csrf_exempt 
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -19,13 +20,19 @@ def make_scraping(request):
         print(e.args)
         return Response({'error': e.output.decode('utf-8')}, status=500)
 
+class CustomPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 100
     
 # Create your views here.
 @csrf_exempt
 @api_view(['GET'])
 def get_hotel_rooms(request):
     try:
-        rooms = HotelRoom.objects.all().order_by('id')
+        pagination = CustomPagination()
+        queryset = HotelRoom.objects.all().order_by('id')
+        rooms = pagination.paginate_queryset(queryset, request)
         serializer = HotelRoomSerializer(rooms, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     except HotelRoom.DoesNotExist:
