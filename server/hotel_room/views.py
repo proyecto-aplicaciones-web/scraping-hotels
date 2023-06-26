@@ -1,3 +1,4 @@
+import subprocess
 from django.views.decorators.csrf import csrf_exempt 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -5,6 +6,20 @@ from rest_framework import status
 from .models import *
 from .serializers import *
 
+@csrf_exempt
+@api_view(['POST'])
+def make_scraping(request):
+    try:
+        venv_path = r'C:\\Users\\juand\\Documents\\react\\scraping-hotels\\server\\venv\\Scripts\\activate.bat'
+        scraping_command = 'python ./manage.py scrapinghotelrooms'
+        command = f'{venv_path} && {scraping_command}'
+        result = subprocess.check_output(command, stderr=subprocess.STDOUT)
+        return Response({'ok': True})
+    except subprocess.CalledProcessError as e:
+        print(e.args)
+        return Response({'error': e.output.decode('utf-8')}, status=500)
+
+    
 # Create your views here.
 @csrf_exempt
 @api_view(['GET'])

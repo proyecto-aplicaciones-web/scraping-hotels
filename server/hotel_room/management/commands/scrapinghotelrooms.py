@@ -13,6 +13,6 @@ class Command(BaseCommand):
 
         process.crawl('BookingSpider') 
         process.crawl('TripadvisorSpider') 
-        process.crawl('SkyscannerSpider')
-        process.crawl('HotelesSpider')
+        # process.crawl('SkyscannerSpider')
+        # process.crawl('HotelesSpider')
         process.start() 

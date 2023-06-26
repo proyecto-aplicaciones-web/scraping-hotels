@@ -1,14 +1,18 @@
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import Ranking from "./Ranking";
+import { MakeScraping } from 'components';
 
 function Dashboard() {
 	return (
-		<main className='grid grid-cols-12 gap-4 2xl:gap-0'>
+		<main className='relative grid grid-cols-12 gap-4 2xl:gap-0'>
 			<div className="col-span-full 2xl:col-span-4">
 				<Ranking />
 			</div>
 			<div className="col-span-full 2xl:col-span-8">
 				<Chart />
+			</div>
+			<div className='fixed right-4 bottom-2'>
+				<MakeScraping />
 			</div>
 		</main>
 	);

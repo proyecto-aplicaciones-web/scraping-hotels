@@ -2,7 +2,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from 'config/tanstackQuery';
 import { AuthProvider } from 'context/AuthContext';
-import React from 'react';
+import { UtilsProvider } from 'context/UtilsContext';
 import ReactDOM from 'react-dom/client';
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
@@ -15,7 +15,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 	<AuthProvider>
 		<ThemeProvider theme={ theme }>
 			<QueryClientProvider client={ queryClient }>
-				<App />
+				<UtilsProvider>
+					<App />
+				</UtilsProvider>
 			</QueryClientProvider>
 		</ThemeProvider>
 	</AuthProvider>

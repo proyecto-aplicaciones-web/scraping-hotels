@@ -32,7 +32,7 @@ function Ranking() {
 								<div className="flex-1 flex items-center justify-between gap-8">
 									<div className="flex flex-col justify-center items-start max-w-[12rem] truncate">
 										<h5 className="ml-1 truncate">{ room.name }</h5>
-										<Rating name="half-rating-read" defaultValue={ room.score === -1 ? 3 : room.score / 2 } precision={ 0.5 } readOnly />
+										<Rating name="half-rating-read" defaultValue={ room.score === -1 ? 3 : room.score } precision={ 1 } readOnly />
 									</div>
 									<div className="flex items-center gap-2 bg-primary rounded-full px-2 py-1 text-white shadow-sm shadow-black/40">
 										<TourOutlined />

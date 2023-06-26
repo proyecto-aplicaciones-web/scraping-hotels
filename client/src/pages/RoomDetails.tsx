@@ -79,7 +79,7 @@ function RoomDetails() {
 							<img src="https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg" alt="no image" />
 						</picture>
 					) }
-					<div className="col-span-2 flex flex-col justify-around">
+					<div className="col-span-2 flex flex-col gap-4">
 						<div className="space-y-4">
 							<div className="flex justify-between items-center gap-4">
 								<h4 className="text-2xl text-primary italic font-semibold tracking-wider">{ room.name }</h4>
@@ -112,7 +112,7 @@ function RoomDetails() {
 									) }
 									<OpenInNewOutlined />
 								</a>
-								<Rating name="half-rating-read" defaultValue={ room.score === -1 ? 3 : room.score / 2 } precision={ 0.5 } readOnly />
+								<Rating name="half-rating-read" defaultValue={ room.score === -1 ? 3 : room.score } precision={ 1 } readOnly />
 							</div>
 						</div>
 					</div>
