@@ -1,4 +1,5 @@
 import { Rating } from "@mui/material";
+import React from "react";
 import { Link } from "react-router-dom";
 import { Room as IRoom } from "types";
 import { formatCurrency } from "utils";
@@ -7,9 +8,9 @@ interface RoomProps {
 	room: IRoom;
 }
 
-function Room({ room }: RoomProps) {
+const Room = React.forwardRef(({ room }: RoomProps, ref: any): any => {
 	return (
-		<Link className="block" to={ `/rooms/${room.id}` }>
+		<Link ref={ ref } className="block" to={ `/rooms/${room.id}` }>
 			<div className="w-full flex gap-2 sm:gap-4 text-sm sm:text-base">
 				{ room.images.length ? (
 					<img className="w-32 sm:w-48 h-32 object-cover rounded-md" src={ room.images[0].image } alt={ `room image ${room.name}` } />
@@ -29,6 +30,6 @@ function Room({ room }: RoomProps) {
 			</div>
 		</Link>
 	);
-}
+});
 
 export default Room;
