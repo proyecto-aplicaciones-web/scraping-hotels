@@ -31,6 +31,8 @@ ALLOWED_HOSTS = ["*"]
 
 CORS_ORIGIN_ALLOW_ALL = True
 
+SOCIAL_AUTH_JSONFIELD_ENABLED = True
+
 # Application definition
 
 DJANGO_APPS = [
@@ -56,6 +58,9 @@ LOCAL_APPS = [
 
 THIRD_PARTY_APPS = [
     'rest_framework_simplejwt',
+		'allauth',
+    'allauth.account',
+    'social_django'
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -63,9 +68,13 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication'
     ),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
+        # 'rest_framework.permissions.IsAuthenticated',
     ]
 }
 
@@ -120,6 +129,24 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+    'social_core.backends.google.GoogleOAuth2',
+    'allauth.socialaccount.providers.google.auth_backends.GoogleOAuth2Backend',
+]
+
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': ENV_VARIABLES['GOOGLE_AUTH_CLIENT_ID'],
+            'secret': ENV_VARIABLES['GOOGLE_AUTH_CLIENT_SECRET'],
+            'key': ''
+        }
+    }
+}
+
 ROOT_URLCONF = 'hotel_scraping_project.urls'
 
 TEMPLATES = [
@@ -144,23 +171,26 @@ WSGI_APPLICATION = 'hotel_scraping_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+from dotenv import load_dotenv
+import os
+load_dotenv()
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #     'NAME': 'scraping-hotels',
-    #     'USER': 'postgres',
-    #     'PASSWORD': '123456',
-    #     'HOST': 'localhost',
-    #     'PORT': '5432',
-    # },
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': ENV_VARIABLES['DATABASE_NAME'],
-        'USER': ENV_VARIABLES['DATABASE_USER'],
-        'PASSWORD': ENV_VARIABLES['DATABASE_PASSWORD'],
-        'HOST': ENV_VARIABLES['DATABASE_HOST'],
-        'PORT': ENV_VARIABLES['DATABASE_PORT'],
-    },
+        'NAME': os.getenv("DATABASE_NAME"),
+        'USER': os.getenv("DATABASE_USER"),
+        'PASSWORD': os.getenv("DATABASE_PASSWORD"),
+        'HOST': os.getenv("DATABASE_HOST"),
+        'PORT': os.getenv("DATABASE_PORT"),
+    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': ENV_VARIABLES['DATABASE_NAME'],
+    #     'USER': ENV_VARIABLES['DATABASE_USER'],
+    #     'PASSWORD': ENV_VARIABLES['DATABASE_PASSWORD'],
+    #     'HOST': ENV_VARIABLES['DATABASE_HOST'],
+    #     'PORT': ENV_VARIABLES['DATABASE_PORT'],
+    # },
 }
 
 

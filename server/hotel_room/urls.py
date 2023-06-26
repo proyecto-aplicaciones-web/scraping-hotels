@@ -3,7 +3,9 @@ from hotel_room import views
 
 
 urlpatterns = [
+		path('make_scraping/', views.make_scraping, name='make_scraping'),
     path('', views.get_hotel_rooms, name='get_hotel_rooms'),
+    path('count/', views.get_rooms_count, name='get_rooms_count'),
     path('<int:room_id>/', views.get_hotel_room, name='get_hotel_room'),
     path('create/', views.create_hotel_room, name='create_hotel_room'),
     path('modify/<int:room_id>/', views.modify_hotel_room, name='modify_hotel_room'),

@@ -62,33 +62,18 @@ function Sidebar({ isOpen, onClose }: SidebarProps) {
 						<div>
 							<span className="inline-block pb-1 uppercase text-sm italic font-semibold">Users</span>
 							<ul className="leading-6">
-								<SidebarLink to='./users' icon={ <PersonOutline fontSize="inherit" /> } text="Users List" />
-								<SidebarLink to='./users/create' icon={ <PersonAddOutlined fontSize="inherit" /> } text="Create an user" />
+								<SidebarLink to='./users' icon={ <PersonOutline fontSize="inherit" /> } text="Users" />
+								<SidebarLink to='./users/create' icon={ <PersonAddOutlined fontSize="inherit" /> } text="Create users" />
 							</ul>
 						</div>
 						<hr />
 						<div>
 							<span className="inline-block pb-1 uppercase text-sm italic font-semibold">News</span>
 							<ul className="leading-6">
-								<SidebarLink to='./news' icon={ <ArticleOutlined fontSize="inherit" /> } text="News List" />
+								<SidebarLink to='./news' icon={ <ArticleOutlined fontSize="inherit" /> } text="News" />
 								<SidebarLink to='./news/create' icon={ <EditNoteOutlined fontSize="inherit" /> } text="Create news" />
 							</ul>
 						</div>
-					</div>
-					<div className="mt-6">
-						<span className="inline-block text-lg text-primary font-semibold ml-2 mb-1">Reports</span>
-						<ul className="space-y-1">
-							<Link to='./report-one'>
-								<li className="hover:bg-primary/40 transition-colors rounded-md p-2">
-									Report one
-								</li>
-							</Link>
-							<Link to='./report-two'>
-								<li className="hover:bg-primary/40 transition-colors rounded-md p-2">
-									Report two
-								</li>
-							</Link>
-						</ul>
 					</div>
 				</div>
 				<button className="flex justify-center items-center gap-2 text-secondary hover:text-white transition-colors hover:bg-secondary px-2 py-2 rounded-md" onClick={ onLogout }>

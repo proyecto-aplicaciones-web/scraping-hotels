@@ -23,6 +23,8 @@ urlpatterns = [
     # path('token/verify', TokenVerifyView.as_view(), name='token_verify'),
     # path('token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
     path('admin/', admin.site.urls),
+    path('accounts/', include('allauth.urls')),
+    path('accounts/', include('social_django.urls', namespace='social')),
     path('users/', include('user.urls')),
     path('news/', include('new.urls')),
     path('hotel_room/', include('hotel_room.urls')),

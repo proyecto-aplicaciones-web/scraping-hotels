@@ -1,9 +1,25 @@
 import axios from "config/axios";
 import { Room } from "types";
 
-export function getAll(): Promise<Room[]> {
+interface getAllOptions {
+	page: number;
+}
+
+export function makeScraping(): Promise<any> {
 	return axios
-	.get('/hotel_room/')
+	.post('/hotel_room/make_scraping/')
+	.then(res => res.data);
+}
+
+export function getTotalCount(): Promise<number> {
+	return axios
+	.get('/hotel_room/count/')
+	.then(res => res.data.count);
+}
+
+export function getAll({page}: getAllOptions): Promise<Room[]> {
+	return axios
+	.get(`/hotel_room/?page=${page}&page_size=8`)
 	.then(res => res.data);
 }
 
