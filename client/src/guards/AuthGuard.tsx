@@ -6,7 +6,7 @@ interface AuthGuardProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 function AuthGuard({ children }: AuthGuardProps) {
 	const { auth } = useAuth();
-	const { pathname } = useLocation();
+	const { pathname, search } = useLocation();
 
 	useEffect(() => {
 		if (auth) return;
@@ -14,7 +14,7 @@ function AuthGuard({ children }: AuthGuardProps) {
 	}, []);
 
 	if (!auth) {
-		return <Navigate to="/signin" state={ { from: pathname } } />;
+		return <Navigate to="/signin" state={ { from: pathname + search } } />;
 	}
 
 	return <>{ children }</>;

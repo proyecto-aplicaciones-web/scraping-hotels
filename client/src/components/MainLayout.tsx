@@ -1,10 +1,12 @@
 import { ArrowRightAltRounded, LoginOutlined, SearchSharp } from "@mui/icons-material";
 import { useAuth } from "context/AuthContext";
-import { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { useRef, useState } from "react";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 function MainLayout() {
 	const { auth, logout } = useAuth();
+	const navigate = useNavigate();
+	const searchRef = useRef<HTMLInputElement>(null);
 
 	const [isVisibleAuthInfo, setIsVisibleAuthInfo] = useState(false);
 
@@ -12,7 +14,9 @@ function MainLayout() {
 
 	const onSearch = (e: React.FormEvent) => {
 		e.preventDefault();
-		console.log('submit');
+		const q = searchRef?.current?.value;
+		navigate(`rooms/search?q=${q}`);
+
 	};
 
 	return (
@@ -29,7 +33,7 @@ function MainLayout() {
 				</Link>
 				<div className="flex gap-2 items-center">
 					<form onSubmit={ onSearch } autoComplete="off" className="flex items-stretch w-auto sm:w-72">
-						<input type="text" className="flex-1 w-32 sm:w-auto border px-2 py-1 rounded-l-lg focus:outline -outline-offset-1 outline-primary" placeholder="Search ..." />
+						<input ref={ searchRef } type="text" className="flex-1 w-32 sm:w-auto border px-2 py-1 rounded-l-lg focus:outline -outline-offset-1 outline-primary" placeholder="Search ..." />
 						<button type="submit" className="bg-primary px-2 rounded-r-lg"><SearchSharp fontSize="medium" className="text-white" /></button>
 					</form>
 					{ !!auth

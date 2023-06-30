@@ -1,4 +1,4 @@
-import { AdminPanelSettings, ArticleOutlined, CloseRounded, EditNoteOutlined, MenuRounded, PersonAddOutlined, PersonOutline } from '@mui/icons-material';
+import { AdminPanelSettings, ArticleOutlined, BedroomParentOutlined, CloseRounded, EditNoteOutlined, MenuRounded, PersonAddOutlined, PersonOutline } from '@mui/icons-material';
 import { Logo } from "components";
 import { useAuth } from 'context/AuthContext';
 import React, { useState } from "react";
@@ -72,6 +72,13 @@ function Sidebar({ isOpen, onClose }: SidebarProps) {
 							<ul className="leading-6">
 								<SidebarLink to='./news' icon={ <ArticleOutlined fontSize="inherit" /> } text="News" />
 								<SidebarLink to='./news/create' icon={ <EditNoteOutlined fontSize="inherit" /> } text="Create news" />
+							</ul>
+						</div>
+						<hr />
+						<div>
+							<span className="inline-block pb-1 uppercase text-sm italic font-semibold">Rooms</span>
+							<ul className="leading-6">
+								<SidebarLink to='/rooms/search' icon={ <BedroomParentOutlined fontSize="inherit" /> } text="Search rooms" />
 							</ul>
 						</div>
 					</div>

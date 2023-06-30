@@ -2,7 +2,7 @@ import { QueryClient } from "@tanstack/react-query";
 
 export const queryClient = new QueryClient();
 
-type Key = 'USER_LIST' | 'NEWS_LIST' | 'LATEST_NEWS' | 'MOST_VISITED_ROOMS' | 'VISITED_ROOMS' | 'ROOM' | 'ROOM_LIST' | 'USERS_TOTAL_COUNT' | 'ROOMS_TOTAL_COUNT';
+type Key = 'USER_LIST' | 'NEWS_LIST' | 'LATEST_NEWS' | 'MOST_VISITED_ROOMS' | 'VISITED_ROOMS' | 'ROOM' | 'ROOM_LIST' | 'ROOM_SEARCH_LIST' | 'USERS_TOTAL_COUNT' | 'ROOMS_TOTAL_COUNT';
 
 export const QUERY_KEYS: Record<Key,string> = {
 	USER_LIST: 'user_list',
@@ -13,5 +13,6 @@ export const QUERY_KEYS: Record<Key,string> = {
 	VISITED_ROOMS: 'visited_rooms',
 	ROOM: 'room',
 	ROOM_LIST: 'room_list',
+	ROOM_SEARCH_LIST: 'room_search_list',
 	ROOMS_TOTAL_COUNT: 'rooms_total_count'
 } 

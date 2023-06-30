@@ -1,4 +1,5 @@
 import subprocess
+import re
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.decorators import api_view
@@ -40,7 +41,13 @@ def get_rooms_count(request):
 def get_hotel_rooms(request):
     try:
         pagination = CustomPagination()
+        search = request.GET.get('q')
+        order = request.GET.get('order')
         queryset = HotelRoom.objects.all().order_by('id')
+        if order:
+          queryset = queryset.order_by(order)
+        if search:
+          queryset = queryset.filter(name__iregex=r'.*{}.*'.format(re.escape(search)))
         rooms = pagination.paginate_queryset(queryset, request)
         serializer = HotelRoomSerializer(rooms, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

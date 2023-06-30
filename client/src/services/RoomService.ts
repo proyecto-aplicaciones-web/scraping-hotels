@@ -3,6 +3,10 @@ import { Room } from "types";
 
 interface getAllOptions {
 	page: number;
+	params?: {
+		q?: string;
+		order?: string;
+	}
 }
 
 export function makeScraping(): Promise<any> {
@@ -17,9 +21,11 @@ export function getTotalCount(): Promise<number> {
 	.then(res => res.data.count);
 }
 
-export function getAll({page}: getAllOptions): Promise<Room[]> {
+export function getAll({page,params}: getAllOptions): Promise<Room[]> {
 	return axios
-	.get(`/hotel_room/?page=${page}&page_size=8`)
+	.get(`/hotel_room/?page_size=8`, {
+		params: {page, ...params}
+	})
 	.then(res => res.data);
 }
 

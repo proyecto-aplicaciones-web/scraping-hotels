@@ -1,6 +1,6 @@
 import { MainLayout } from 'components';
 import { AdminGuard, AuthGuard } from 'guards';
-import { AdminLayout, CreateNew, CreateUser, Dashboard, MainPage, NewsList, NotFoundPage, RoomDetails, SignInPage, SignUpPage, UserList, VisitedHotels } from 'pages';
+import { AdminLayout, CreateNew, CreateUser, Dashboard, MainPage, NewsList, NotFoundPage, RoomDetails, SearchRooms, SignInPage, SignUpPage, UserList, VisitedHotels } from 'pages';
 import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 const router = createBrowserRouter([
@@ -25,6 +25,10 @@ const router = createBrowserRouter([
 			{
 				path: ":roomId",
 				element: <RoomDetails />
+			},
+			{
+				path: "search",
+				element: <SearchRooms />,
 			}
 		]
 	},

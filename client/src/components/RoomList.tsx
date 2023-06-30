@@ -1,45 +1,27 @@
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { QUERY_KEYS } from 'config/tanstackQuery';
-import { RoomService } from 'services';
+import { useRooms } from 'hooks';
 import Loader from './Loader';
 import Room from './Room';
-import { useCallback, useRef } from 'react';
 
-function RoomList() {
-	const {
-		fetchNextPage, //function 
-		hasNextPage, // boolean
-		isFetchingNextPage, // boolean
-		data,
-		status,
-		error
-	} = useInfiniteQuery([QUERY_KEYS.ROOM_LIST], ({ pageParam = 1 }) => RoomService.getAll({ page: pageParam }), {
-		getNextPageParam: (lastPage, allPages) => {
-			return lastPage.length ? allPages.length + 1 : undefined;
-		}
-	});
+interface RoomListProps {
+	query_key: string;
+	params?: {
+		q?: string;
+		order?: string;
+	};
+}
 
-	const intObserver = useRef<any>();
-
-	const lastPostRef = useCallback((room: any) => {
-		if (isFetchingNextPage) return;
-
-		if (intObserver.current) intObserver.current.disconnect();
-
-		intObserver.current = new IntersectionObserver(rooms => {
-			if (rooms[0].isIntersecting && hasNextPage) {
-				!error && fetchNextPage();
-			}
-		});
-
-		if (room) intObserver.current.observe(room);
-	}, [isFetchingNextPage, fetchNextPage, hasNextPage]);
-
-	// if (status === 'error') return <p className=s'center'>Error: { error.message }</p>;
+function RoomList({ query_key, params }: RoomListProps) {
+	const { data, lastPostRef, isFetchingNextPage } = useRooms({ query_key, params });
 
 	if (!data) return (
 		<div>
 			<Loader text='Loading rooms' />
+		</div>
+	);
+
+	if (data.pages[0].length === 0) return (
+		<div className='text-center'>
+			<span className='text-xl text-primary'>There are no results!</span>
 		</div>
 	);
 
@@ -55,7 +37,7 @@ function RoomList() {
 					});
 				}) }
 			</div>
-			{ isFetchingNextPage && !error && <div className='w-fit mx-auto mt-6'>
+			{ isFetchingNextPage && <div className='w-fit mx-auto mt-6'>
 				<Loader />
 			</div> }
 		</>

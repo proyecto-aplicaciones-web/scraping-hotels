@@ -10,4 +10,5 @@ export { default as NotFoundPage } from './NotFoundPage';
 export { default as RoomDetails } from './RoomDetails';
 export { default as SignInPage } from './SignInPage';
 export { default as SignUpPage } from './SignUpPage';
+export { default as SearchRooms } from './SearchRooms';
 
